@@ -2,9 +2,57 @@
 <html>
 <head>
     <title>Fitness Tracker</title>
+    <style>
+        /* Inline CSS to style the page */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            padding: 20px;
+            color: white;
+        }
+        nav {
+            margin: 20px;
+        }
+        nav a {
+            text-decoration: none;
+            margin: 10px;
+            padding: 10px 15px;
+            background-color: #f0f0f0;
+            color: #333;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        nav a:hover {
+            background-color: #ddd;
+        }
+        footer {
+            margin-top: 40px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            color: #777;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Fitness Tracker</h1>
-    <p>Log your workouts, set goals, and track progress!</p>
+    <header>
+        <h1>Welcome to Fitness Tracker</h1>
+    </header>
+
+    <p>Track your workouts, set personal goals, and monitor your progress all in one place.</p>
+
+    <nav>
+        <a href="{{ url_for('main.log_workout') }}">Log a Workout</a>
+        <a href="{{ url_for('main.set_goal') }}">Set a Goal</a>
+        <a href="{{ url_for('main.progress') }}">View Progress</a>
+    </nav>
+
+    <footer>
+        &copy; 2024 Fitness Tracker
+    </footer>
 </body>
 </html>

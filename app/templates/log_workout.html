@@ -1,0 +1,9 @@
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <p>{{ form.workout_type.label }} {{ form.workout_type }}</p>
+    <p>{{ form.date.label }} {{ form.date }}</p>
+    <p>{{ form.duration.label }} {{ form.duration }}</p>
+    <p>{{ form.intensity.label }} {{ form.intensity }}</p>
+    <p>{{ form.notes.label }} {{ form.notes }}</p>
+    <p>{{ form.submit }}</p>
+</form>

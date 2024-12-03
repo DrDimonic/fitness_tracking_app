@@ -1,0 +1,7 @@
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <p>{{ form.goal_description.label }} {{ form.goal_description }}</p>
+    <p>{{ form.target_date.label }} {{ form.target_date }}</p>
+    <p>{{ form.target_value.label }} {{ form.target_value }}</p>
+    <p>{{ form.submit }}</p>
+</form>

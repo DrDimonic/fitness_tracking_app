@@ -3,21 +3,30 @@
 <head>
     <title>Fitness Tracker</title>
     <style>
-        /* Inline CSS to style the page */
+        /* General page styling */
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #2c2c2c; /* Dark gray background */
+            color: #ffffff; /* White text for contrast */
         }
+
         header {
             background-color: #4CAF50;
             padding: 20px;
+            text-align: center;
             color: white;
         }
+
         nav {
-            margin: 20px;
+            margin: 20px auto;
+            text-align: center;
         }
+
         nav a {
             text-decoration: none;
             margin: 10px;
@@ -27,14 +36,18 @@
             border-radius: 5px;
             display: inline-block;
         }
+
         nav a:hover {
             background-color: #ddd;
         }
+
+        /* Footer styling */
         footer {
-            margin-top: 40px;
+            margin-top: auto; /* Push footer to the bottom */
             padding: 10px;
-            background-color: #f1f1f1;
+            background-color: #1a1a1a; /* Darker gray footer */
             color: #777;
+            text-align: center;
         }
     </style>
 </head>
@@ -43,7 +56,7 @@
         <h1>Welcome to Fitness Tracker</h1>
     </header>
 
-    <p>Track your workouts, set personal goals, and monitor your progress all in one place.</p>
+    <p style="text-align: center;">Track your workouts, set personal goals, and monitor your progress all in one place.</p>
 
     <nav>
         <a href="{{ url_for('main.log_workout') }}">Log a Workout</a>

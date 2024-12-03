@@ -47,19 +47,28 @@ def set_goal():
 # Route for viewing progress
 @main.route('/progress')
 def progress():
-    # Fetch the user's goals and workouts
-    user_goals = Goal.select().where(Goal.user == 1)  # Replace with actual user ID
-    user_workouts = Workout.select().where(Workout.user == 1)
-    
-    # Process data to calculate progress
-    progress_data = []
-    for goal in user_goals:
-        # Example: count workouts towards a goal
-        workouts_completed = user_workouts.count()
-        percentage = min(int((workouts_completed / goal.target_value) * 100), 100)
-        progress_data.append({
-            'goal': goal.description,
-            'progress': percentage
-        })
-    
-    return render_template('progress.html', progress_data=progress_data)
+    try:
+        # Fetch the user's goals and workouts
+        user_goals = Goal.select().where(Goal.user == 1)  # Replace with actual user ID
+        user_workouts = Workout.select().where(Workout.user == 1)
+        
+        if not user_goals.exists() or not user_workouts.exists():
+            # If no goals or workouts, raise an exception
+            raise ValueError("No progress data available. Please add goals or log workouts first.")
+        
+        # Process data to calculate progress
+        progress_data = []
+        for goal in user_goals:
+            # Example: count workouts towards a goal
+            workouts_completed = user_workouts.count()
+            percentage = min(int((workouts_completed / goal.target_value) * 100), 100)
+            progress_data.append({
+                'goal': goal.description,
+                'progress': percentage
+            })
+        
+        return render_template('progress.html', progress_data=progress_data)
+
+    except ValueError as e:
+        # Display the error message in the template
+        return render_template('progress.html', error_message=str(e))

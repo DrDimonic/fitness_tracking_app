@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, flash
 from .forms import WorkoutForm, GoalForm
-from .models import db, Workout, User
+from .models import Workout, Goal
 
 # Blueprint for the main routes
 main = Blueprint('main', __name__)
@@ -15,16 +15,16 @@ def index():
 def log_workout():
     form = WorkoutForm()
     if form.validate_on_submit():
-        # Save workout data to the database
+        # Save the workout to the database
         Workout.create(
-            user=1,  # Placeholder; replace with logged-in user's ID
+            user=1,  # Replace with the actual user ID
             workout_type=form.workout_type.data,
             date=form.date.data,
             duration=form.duration.data,
             intensity=form.intensity.data,
             notes=form.notes.data
         )
-        flash("Workout logged successfully!", "success")
+        flash('Workout logged successfully!')
         return redirect(url_for('main.index'))
     return render_template('log_workout.html', form=form)
 
@@ -33,15 +33,18 @@ def log_workout():
 def set_goal():
     form = GoalForm()
     if form.validate_on_submit():
-        # Save goal data to the database (add Goal model if needed)
-        flash("Goal set successfully!", "success")
+        # Save the goal to the database
+        Goal.create(
+            user=1,  # Replace with the actual user ID
+            description=form.goal_description.data,
+            target_date=form.target_date.data,
+            target_value=form.target_value.data
+        )
+        flash('Goal set successfully!')
         return redirect(url_for('main.index'))
     return render_template('set_goal.html', form=form)
 
 # Route for viewing progress
 @main.route('/progress')
 def progress():
-    # Example progress calculation
-    total_workouts = Workout.select().count()
-    # Replace with actual goal-tracking logic
-    return render_template('progress.html', total_workouts=total_workouts)
+    return render_template('progress.html')

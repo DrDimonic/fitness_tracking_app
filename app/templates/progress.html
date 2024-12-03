@@ -1,3 +1,14 @@
-<h2>Your Progress</h2>
-<p>Total workouts logged: {{ total_workouts }}</p>
-<!-- Add visualizations and goal-tracking details -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Progress</title>
+</head>
+<body>
+    <h2>Your Progress</h2>
+    {% for item in progress_data %}
+        <h3>{{ item.goal }}</h3>
+        <p>Progress: {{ item.progress }}%</p>
+    {% endfor %}
+    <p><a href="{{ url_for('main.index') }}">Back to Home</a></p>
+</body>
+</html>

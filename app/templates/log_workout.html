@@ -1,9 +1,34 @@
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <p>{{ form.workout_type.label }} {{ form.workout_type }}</p>
-    <p>{{ form.date.label }} {{ form.date }}</p>
-    <p>{{ form.duration.label }} {{ form.duration }}</p>
-    <p>{{ form.intensity.label }} {{ form.intensity }}</p>
-    <p>{{ form.notes.label }} {{ form.notes }}</p>
-    <p>{{ form.submit }}</p>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Log Workout</title>
+</head>
+<body>
+    <h2>Log a New Workout</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.workout_type.label }}<br>
+            {{ form.workout_type(size=32) }}
+        </p>
+        <p>
+            {{ form.date.label }}<br>
+            {{ form.date() }}
+        </p>
+        <p>
+            {{ form.duration.label }}<br>
+            {{ form.duration() }}
+        </p>
+        <p>
+            {{ form.intensity.label }}<br>
+            {{ form.intensity(size=32) }}
+        </p>
+        <p>
+            {{ form.notes.label }}<br>
+            {{ form.notes(cols=30, rows=5) }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <p><a href="{{ url_for('main.index') }}">Back to Home</a></p>
+</body>
+</html>

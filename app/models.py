@@ -6,7 +6,7 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-# User model to store user account information
+# Model to store user account information
 class User(BaseModel):
     username = CharField(unique=True)
     email = CharField(unique=True)
@@ -20,3 +20,11 @@ class Workout(BaseModel):
     duration = IntegerField()  # Minutes
     intensity = CharField()
     notes = CharField(null=True)
+
+# Model for user goal setting
+class Goal(BaseModel):
+    user = ForeignKeyField(User, backref='goals')
+    description = CharField()
+    target_date = DateField()
+    target_value = IntegerField()
+    progress = IntegerField(default=0)

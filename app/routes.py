@@ -47,4 +47,19 @@ def set_goal():
 # Route for viewing progress
 @main.route('/progress')
 def progress():
-    return render_template('progress.html')
+    # Fetch the user's goals and workouts
+    user_goals = Goal.select().where(Goal.user == 1)  # Replace with actual user ID
+    user_workouts = Workout.select().where(Workout.user == 1)
+    
+    # Process data to calculate progress
+    progress_data = []
+    for goal in user_goals:
+        # Example: count workouts towards a goal
+        workouts_completed = user_workouts.count()
+        percentage = min(int((workouts_completed / goal.target_value) * 100), 100)
+        progress_data.append({
+            'goal': goal.description,
+            'progress': percentage
+        })
+    
+    return render_template('progress.html', progress_data=progress_data)

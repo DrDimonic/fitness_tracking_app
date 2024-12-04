@@ -3,36 +3,51 @@
 <head>
     <title>Progress</title>
     <style>
-        /* Style for the body */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
-            align-items: center; 
-            justify-content: center; 
+            align-items: center;
+            justify-content: flex-start;
             min-height: 100vh;
-            background-color: #2c2c2c; 
-            color: #ffffff; 
+            background-color: #2c2c2c; /* Dark gray background */
+            color: #ffffff; /* White text for contrast */
         }
-
-         /* Style for the "Back to Home" link */
-         a {
-            color: #5A9BD5; 
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline; 
-        }
-        
-        /* Style for the footer */
-        footer {
-            margin-top: auto;
-            padding: 10px;
-            background-color: #1a1a1a;
-            color: #777;
+    
+        header {
+            width: 100%;
+            background-color: #4CAF50; /* Green strip across the top */
+            padding: 20px;
             text-align: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+    
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+    
+        p, label {
+            margin: 20px 0; /* Adds spacing between sections */
+        }
+    
+        .btn {
+            all: unset; /* Resets the button to its plain default style */
+            cursor: pointer; /* Ensures pointer cursor on hover */
+        }
+    
+        .link {
+            color: #5A9BD5;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+    
+        .link:hover {
+            text-decoration: underline;
         }
     </style>    
 </head>

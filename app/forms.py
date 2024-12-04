@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, IntegerField, SubmitField, SelectField
+from wtforms import StringField, DateField, FloatField, SelectField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional
 
 class SelectWorkoutTypeForm(FlaskForm):

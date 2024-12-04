@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .forms import SelectWorkoutTypeForm, RunForm, WeightliftingForm, GoalForm
+from .models import Goal, Workout, User
 
 # Blueprint for the main routes
 main = Blueprint('main', __name__)

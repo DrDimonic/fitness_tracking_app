@@ -5,7 +5,6 @@ from . import db
 
 class SelectWorkoutTypeForm(FlaskForm):
     workout_type = SelectField(
-        'Select Workout Type',
         choices=[('run', 'Running'), ('weightlifting', 'Weightlifting')],
         validators=[DataRequired()]
     )

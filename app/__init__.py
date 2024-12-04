@@ -1,10 +1,14 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-from .models import db, User
+from .models import db, User, Goal, Workout
 
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get_or_none(User.id == int(user_id))  # Fetch the user by ID from the database
 
 def create_app():
     app = Flask(__name__)
@@ -25,7 +29,7 @@ def create_app():
 
     # Register blueprints
     from .routes import main
-    from .auth import auth
+    from .authenticate import auth
     app.register_blueprint(main)
     app.register_blueprint(auth, url_prefix='/auth')
 

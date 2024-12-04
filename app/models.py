@@ -4,22 +4,26 @@ from flask_login import UserMixin
 # Define the database object
 db = SqliteDatabase(None)  # Database initialization will happen later
 
-class BaseModel(Model):
-    class Meta:
-        database = db
 
-class User(BaseModel, UserMixin):
+
+class User(Model, UserMixin):
     username = CharField(unique=True, max_length=50)
     email = CharField(unique=True)
     password = CharField()
 
-class Goal(BaseModel):
+    class Meta:
+        database = db
+
+class Goal(Model):
     user = IntegerField()  # Replace with ForeignKeyField(User, backref="goals") if using relationships
     description = CharField()
     target_date = DateField()
     target_value = IntegerField()
 
-class Workout(BaseModel):
+    class Meta:
+        database = db
+
+class Workout(Model):
     user = IntegerField()  # Replace with ForeignKeyField(User, backref="workouts") if using relationships
     workout_type = CharField()
     date = DateField()
@@ -28,3 +32,6 @@ class Workout(BaseModel):
     exercise = CharField(null=True)    # For weightlifting
     weight = IntegerField(null=True)   # For weightlifting
     sets = IntegerField(null=True)     # For weightlifting
+
+    class Meta:
+        database = db

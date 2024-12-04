@@ -32,6 +32,7 @@ class Workout(Model):
     exercise = CharField(null=True)    # For weightlifting
     weight = IntegerField(null=True)   # For weightlifting
     sets = IntegerField(null=True)     # For weightlifting
+    reps = IntegerField(null=True)     # New field for repetitions
 
     class Meta:
         database = db

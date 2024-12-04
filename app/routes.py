@@ -52,13 +52,25 @@ def log_weightlifting():
 
         weight = lifting_form.weight.data
         sets = lifting_form.sets.data
+        reps = lifting_form.reps.data  # Capture repetitions
         difficulty = lifting_form.difficulty.data
 
         # Calculate calories burned (example logic)
         difficulty_multiplier = {'easy': 3, 'moderate': 5, 'hard': 8}
-        calories_burned = sets * weight * difficulty_multiplier[difficulty]
+        calories_burned = sets * reps * weight * difficulty_multiplier[difficulty]
 
-        # Save to database (example only)
+        # Save to database
+        Workout.create(
+            user=current_user.id,
+            workout_type="weightlifting",
+            date=lifting_form.date.data,
+            exercise=exercise,
+            weight=weight,
+            sets=sets,
+            reps=reps,
+            intensity=None
+        )
+
         flash(f"Weightlifting logged! Calories burned: {calories_burned}")
         return redirect(url_for('main.log_workout'))
     return render_template('log_weightlifting.html', form=lifting_form)

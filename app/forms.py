@@ -52,6 +52,7 @@ class WeightliftingForm(FlaskForm):
     custom_exercise = StringField('Custom Exercise Name', validators=[Optional(), Length(max=50)])
     weight = FloatField('Weight (lbs)', validators=[DataRequired()])
     sets = IntegerField('Number of Sets', validators=[DataRequired()])
+    reps = IntegerField('Repetitions', validators=[DataRequired()])  # New field for repetitions
     difficulty = SelectField(
         'Difficulty',
         choices=[('easy', 'Easy'), ('moderate', 'Moderate'), ('hard', 'Hard')],

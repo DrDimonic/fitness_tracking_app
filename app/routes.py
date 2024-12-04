@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
-from .forms import WorkoutForm, GoalForm
-from .models import Workout, Goal
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from .forms import SelectWorkoutTypeForm, RunForm, WeightliftingForm
 
 # Blueprint for the main routes
 main = Blueprint('main', __name__)
@@ -13,20 +12,52 @@ def index():
 # Route for logging workouts
 @main.route('/log_workout', methods=['GET', 'POST'])
 def log_workout():
-    form = WorkoutForm()
-    if form.validate_on_submit():
-        # Save the workout to the database
-        Workout.create(
-            user=1,  # Replace with the actual user ID
-            workout_type=form.workout_type.data,
-            date=form.date.data,
-            duration=form.duration.data,
-            intensity=form.intensity.data,
-            notes=form.notes.data
-        )
-        flash('Workout logged successfully!')
-        return redirect(url_for('main.index'))
-    return render_template('log_workout.html', form=form)
+    select_form = SelectWorkoutTypeForm()
+    if select_form.validate_on_submit():
+        if select_form.workout_type.data == 'run':
+            return redirect(url_for('main.log_run'))
+        elif select_form.workout_type.data == 'weightlifting':
+            return redirect(url_for('main.log_weightlifting'))
+    return render_template('select_workout_type.html', form=select_form)
+
+# Route for logging a run
+@main.route('/log_workout/run', methods=['GET', 'POST'])
+def log_run():
+    run_form = RunForm()
+    if run_form.validate_on_submit():
+        # Calculate calories burned and average speed
+        distance = run_form.distance.data
+        time = run_form.time.data
+        avg_speed = distance / (time / 60)  # Average speed in mph
+        calories_burned = distance * 100  # Approximate calorie burn
+
+        # Save to database (example only)
+        flash(f"Run logged! Calories burned: {calories_burned} | Avg speed: {avg_speed:.2f} mph")
+        return redirect(url_for('main.log_workout'))
+    return render_template('log_run.html', form=run_form)
+
+# Route for logging a lift
+@main.route('/log_workout/weightlifting', methods=['GET', 'POST'])
+def log_weightlifting():
+    lifting_form = WeightliftingForm()
+    if lifting_form.validate_on_submit():
+        # Get user input
+        exercise = lifting_form.exercise.data
+        if exercise == 'custom':
+            exercise = lifting_form.custom_exercise.data
+
+        weight = lifting_form.weight.data
+        sets = lifting_form.sets.data
+        difficulty = lifting_form.difficulty.data
+
+        # Calculate calories burned (example logic)
+        difficulty_multiplier = {'easy': 3, 'moderate': 5, 'hard': 8}
+        calories_burned = sets * weight * difficulty_multiplier[difficulty]
+
+        # Save to database (example only)
+        flash(f"Weightlifting logged! Calories burned: {calories_burned}")
+        return redirect(url_for('main.log_workout'))
+    return render_template('log_weightlifting.html', form=lifting_form)
 
 # Route for goal setting
 @main.route('/set_goal', methods=['GET', 'POST'])

@@ -1,18 +1,43 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, IntegerField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, Optional
 
-class WorkoutForm(FlaskForm):
-    workout_type = StringField('Workout Type', validators=[DataRequired(), Length(max=50)])
-    date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
-    duration = SelectField(
-        'Duration (minutes)',
-        choices=[(str(i), f"{i} minutes") for i in range(5, 121, 5)],  # Dropdown: 5 to 120 minutes
+class SelectWorkoutTypeForm(FlaskForm):
+    workout_type = SelectField(
+        'Select Workout Type',
+        choices=[('run', 'Running'), ('weightlifting', 'Weightlifting')],
         validators=[DataRequired()]
     )
-    intensity = StringField('Intensity', validators=[DataRequired(), Length(max=20)])
-    notes = StringField('Notes', validators=[Length(max=200)])
-    submit = SubmitField('Log Workout')
+    submit = SubmitField('Next')
+
+class RunForm(FlaskForm):
+    date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+    distance = FloatField('Distance (miles)', validators=[DataRequired()])
+    time = FloatField('Time (minutes)', validators=[DataRequired()])
+    submit = SubmitField('Log Run')
+
+class WeightliftingForm(FlaskForm):
+    date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+    exercise = SelectField(
+        'Exercise',
+        choices=[
+            ('bench_press', 'Bench Press'),
+            ('squat', 'Squat'),
+            ('deadlift', 'Deadlift'),
+            ('overhead_press', 'Overhead Press'),
+            ('custom', 'Custom')
+        ],
+        validators=[DataRequired()]
+    )
+    custom_exercise = StringField('Custom Exercise Name', validators=[Optional(), Length(max=50)])
+    weight = FloatField('Weight (lbs)', validators=[DataRequired()])
+    sets = IntegerField('Number of Sets', validators=[DataRequired()])
+    difficulty = SelectField(
+        'Difficulty',
+        choices=[('easy', 'Easy'), ('moderate', 'Moderate'), ('hard', 'Hard')],
+        validators=[DataRequired()]
+    )
+    submit = SubmitField('Log Weightlifting')
 
 class GoalForm(FlaskForm):
     goal_description = StringField('Goal Description', validators=[DataRequired(), Length(max=100)])

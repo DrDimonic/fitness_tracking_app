@@ -1,12 +1,16 @@
 from app.models import db, User, Goal, Workout
+from app import bcrypt
 
 def populate_test_data():
     # Connect to the database
     db.connect()
 
-    # Create some test users
-    user1 = User.create(username="testuser1", email="test1@example.com", password="hashed_password1")
-    user2 = User.create(username="testuser2", email="test2@example.com", password="hashed_password2")
+    # Create some test users with hashed passwords
+    hashed_password1 = bcrypt.generate_password_hash("testpassword1").decode('utf-8')
+    hashed_password2 = bcrypt.generate_password_hash("testpassword2").decode('utf-8')
+
+    user1 = User.create(username="testuser1", email="test1@example.com", password=hashed_password1)
+    user2 = User.create(username="testuser2", email="test2@example.com", password=hashed_password2)
 
     # Add test goals for user1
     Goal.create(user=user1.id, description="Run 50 miles in a month", target_date="2024-12-31", target_value=50)
@@ -23,4 +27,4 @@ def populate_test_data():
     db.close()
 
 if __name__ == "__main__":
-    populate_test_data() 
+    populate_test_data()

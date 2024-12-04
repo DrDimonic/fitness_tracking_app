@@ -31,15 +31,23 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.get_or_none(User.email == email)
-        if user and bcrypt.check_password_hash(user.password, password):
-            login_user(user)
-            flash('Login successful!', 'success')
-            return redirect(url_for('main.index'))
-        else:
-            flash('Invalid email or password.', 'danger')
+        print(f"Attempting login with email: {email}")  # Debugging
 
+        user = User.get_or_none(User.email == email)
+        if user:
+            print("User found in database.")  # Debugging
+            if bcrypt.check_password_hash(user.password, password):
+                login_user(user)
+                flash('Login successful!', 'success')
+                return redirect(url_for('main.index'))
+            else:
+                print("Password does not match.")  # Debugging
+        else:
+            print("No user found with that email.")  # Debugging
+
+        flash('Invalid email or password.', 'danger')
     return render_template('login.html')
+
 
 @auth.route('/logout')
 @login_required

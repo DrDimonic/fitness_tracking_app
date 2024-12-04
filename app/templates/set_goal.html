@@ -61,7 +61,7 @@
     </style>    
 </head>
 <body>
-    <h2>Set a New Goal</h2>
+    <header>Set a New Goal</header>
     <form method="POST">
         {{ form.hidden_tag() }}
         <p>{{ form.goal_description.label }}<br>{{ form.goal_description(size=64) }}</p>
@@ -69,6 +69,8 @@
         <p>{{ form.target_value.label }}<br>{{ form.target_value() }}</p> <!-- Dropdown -->
         <p>{{ form.submit() }}</p>
     </form>
-    <p><a href="{{ url_for('main.index') }}">Back to Home</a></p>    
+    <footer>
+        <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>  
+    </footer>  
 </body>
 </html>

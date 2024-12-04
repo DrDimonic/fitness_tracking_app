@@ -2,6 +2,8 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from .models import db, User, Goal, Workout
+import os
+
 
 bcrypt = Bcrypt()
 login_manager = LoginManager()
@@ -19,6 +21,9 @@ def create_app():
     bcrypt.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+
+    # Set the database path
+    app.config['DATABASE'] = os.path.join(os.path.dirname(__file__), 'databases', 'fitness_app.db')
 
     # Initialize the database
     db.init(app.config['DATABASE'])

@@ -63,14 +63,14 @@
     </style> 
 </head>
 <body>
-    <h2>Log a Run</h2>
+    <header>Log a Run</header>
     <form method="POST">
         {{ form.hidden_tag() }}
         <p>{{ form.date.label }}<br>{{ form.date() }}</p>
         <p>{{ form.distance.label }}<br>{{ form.distance() }}</p>
         <p>{{ form.time.label }}<br>{{ form.time() }}</p>
-        <p>{{ form.submit() }}</p>
+        <p><button class="btn">{{ form.submit() }}</button></p>
     </form>
-    <a href="{{ url_for('main.log_workout') }}">Back to Workout Selection</a>
+    <a href="{{ url_for('main.log_workout') }}" class="link">Back to Workout Selection</a>
 </body>
 </html>

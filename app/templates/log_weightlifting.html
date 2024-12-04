@@ -63,7 +63,7 @@
     </style> 
 </head>
 <body>
-    <h2>Log Weightlifting</h2>
+    <header>Log Weightlifting</header>
     <form method="POST">
         {{ form.hidden_tag() }}
         <p>{{ form.date.label }}<br>{{ form.date() }}</p>
@@ -72,8 +72,8 @@
         <p>{{ form.weight.label }}<br>{{ form.weight() }}</p>
         <p>{{ form.sets.label }}<br>{{ form.sets() }}</p>
         <p>{{ form.difficulty.label }}<br>{{ form.difficulty() }}</p>
-        <p>{{ form.submit() }}</p>
+        <p><button class="btn">{{ form.submit() }}</button></p>
     </form>
-    <a href="{{ url_for('main.log_workout') }}">Back to Workout Selection</a>
+    <a href="{{ url_for('main.log_workout') }}" class="link">Back to Workout Selection</a>
 </body>
 </html>

@@ -20,7 +20,7 @@ def create_app():
     db.init_app(app)
 
     from .routes import main
-    from .auth import auth
+    from .authenticate import auth
     app.register_blueprint(main)
     app.register_blueprint(auth, url_prefix='/auth')
 

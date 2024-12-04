@@ -18,7 +18,7 @@
     
         header {
             width: 100%;
-            background-color: #4CAF50; /* Green strip across the top */
+            background-color: #4CAF50; /* Green ribbon */
             padding: 20px;
             text-align: center;
             color: white;
@@ -41,7 +41,7 @@
         }
     
         .link {
-            color: #5A9BD5;
+            color: #5A9BD5; /* Blue between royal and light blue */
             text-decoration: none;
             margin-top: 20px;
         }
@@ -52,12 +52,12 @@
     </style>    
 </head>
 <body>
-    <h2>Select Workout Type</h2>
+    <header>Select Workout Type</header>
     <form method="POST">
         {{ form.hidden_tag() }}
         <p>{{ form.workout_type.label }}<br>{{ form.workout_type() }}</p>
-        <p>{{ form.submit() }}</p>
+        <p><button class="btn">{{ form.submit() }}</button></p>
     </form>
-    <a href="{{ url_for('main.index') }}">Back to Home</a>
+    <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>
 </body>
 </html>

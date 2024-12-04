@@ -25,7 +25,27 @@ class WeightliftingForm(FlaskForm):
             ('squat', 'Squat'),
             ('deadlift', 'Deadlift'),
             ('overhead_press', 'Overhead Press'),
-            ('custom', 'Custom')
+            ('pull_up', 'Pull-Up'),
+            ('chin_up', 'Chin-Up'),
+            ('barbell_row', 'Barbell Row'),
+            ('dumbbell_row', 'Dumbbell Row'),
+            ('lat_pulldown', 'Lat Pulldown'),
+            ('incline_bench_press', 'Incline Bench Press'),
+            ('dumbbell_curl', 'Dumbbell Curl'),
+            ('barbell_curl', 'Barbell Curl'),
+            ('tricep_dip', 'Tricep Dip'),
+            ('skull_crusher', 'Skull Crusher'),
+            ('leg_press', 'Leg Press'),
+            ('lunges', 'Lunges'),
+            ('romanian_deadlift', 'Romanian Deadlift'),
+            ('calf_raise', 'Calf Raise'),
+            ('seated_calf_raise', 'Seated Calf Raise'),
+            ('leg_extension', 'Leg Extension'),
+            ('leg_curl', 'Leg Curl'),
+            ('shoulder_press', 'Shoulder Press'),
+            ('side_lateral_raise', 'Side Lateral Raise'),
+            ('face_pull', 'Face Pull'),
+            ('custom', 'Custom')  # Allows custom exercise entry
         ],
         validators=[DataRequired()]
     )

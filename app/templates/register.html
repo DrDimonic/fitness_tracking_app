@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <header>Register</header>
+    <form method="POST">
+        <p><label>Username:</label><br><input type="text" name="username" required></p>
+        <p><label>Email:</label><br><input type="email" name="email" required></p>
+        <p><label>Password:</label><br><input type="password" name="password" required></p>
+        <p><button type="submit">Register</button></p>
+    </form>
+    <footer>
+        <a href="{{ url_for('auth.login') }}">Already have an account? Log in</a>
+    </footer>
+</body>
+</html>

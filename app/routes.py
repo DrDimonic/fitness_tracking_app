@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .forms import SelectWorkoutTypeForm, RunForm, WeightliftingForm, GoalForm
 from .models import Goal, Workout, User
+from flask_login import login_required
+
 
 # Blueprint for the main routes
 main = Blueprint('main', __name__)
@@ -12,6 +14,7 @@ def index():
 
 # Route for logging workouts
 @main.route('/log_workout', methods=['GET', 'POST'])
+@login_required
 def log_workout():
     select_form = SelectWorkoutTypeForm()
     if select_form.validate_on_submit():
@@ -78,6 +81,7 @@ def set_goal():
 
 # Route for viewing progress
 @main.route('/progress')
+@login_required
 def progress():
     try:
         # Fetch the user's goals and workouts

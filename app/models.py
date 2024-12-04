@@ -2,7 +2,7 @@ from peewee import Model, CharField, DateField, IntegerField, ForeignKeyField
 from . import db
 
 class User(Model):
-    username = CharField(unique=True)
+    username = CharField(unique=True, max_length=50)
     email = CharField(unique=True)
     password = CharField()
 

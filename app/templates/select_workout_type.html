@@ -40,6 +40,14 @@
             cursor: pointer; /* Ensures pointer cursor on hover */
         }
     
+        footer {
+            width: 100%;
+            text-align: center;
+            margin-top: auto;
+            padding: 10px;
+            background-color: #1a1a1a; /* Darker gray footer */
+        }
+    
         .link {
             color: #5A9BD5; /* Blue between royal and light blue */
             text-decoration: none;
@@ -58,6 +66,8 @@
         <p>{{ form.workout_type.label }}<br>{{ form.workout_type() }}</p>
         <p><button class="btn">{{ form.submit() }}</button></p>
     </form>
-    <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>
+    <footer>
+        <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>
+    </footer>
 </body>
 </html>

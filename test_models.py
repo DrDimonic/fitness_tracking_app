@@ -23,4 +23,4 @@ def populate_test_data():
     db.close()
 
 if __name__ == "__main__":
-    populate_test_data()
+    populate_test_data() 

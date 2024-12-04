@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .forms import SelectWorkoutTypeForm, RunForm, WeightliftingForm, GoalForm
 from .models import Goal, Workout, User
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 
 # Blueprint for the main routes

@@ -1,9 +1,15 @@
+import os
 from app.models import db, User, Goal, Workout
 from app import bcrypt
 
 def populate_test_data():
-    # Connect to the database
+    # Initialize the database
+    db_path = os.path.join(os.path.dirname(__file__), 'app', 'databases', 'fitness_app.db')
+    db.init(db_path)  # Link the db object to the correct database file
     db.connect()
+
+    # Create tables if they don't already exist
+    db.create_tables([User, Goal, Workout], safe=True)
 
     # Create some test users with hashed passwords
     hashed_password1 = bcrypt.generate_password_hash("testpassword1").decode('utf-8')

@@ -1,9 +1,8 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-from .models import db, User, Goal, Workout
+from .models import db, User
 import os
-
 
 bcrypt = Bcrypt()
 login_manager = LoginManager()
@@ -15,22 +14,17 @@ def load_user(user_id):
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
-    app.config['DATABASE'] = 'fitness_app.db'
+    
+    # Set the database path
+    app.config['DATABASE'] = os.path.join(os.path.dirname(__file__), 'databases', 'fitness_app.db')
 
     # Initialize extensions
     bcrypt.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
 
-    # Set the database path
-    app.config['DATABASE'] = os.path.join(os.path.dirname(__file__), 'databases', 'fitness_app.db')
-
     # Initialize the database
     db.init(app.config['DATABASE'])
-
-    # Create tables
-    with db:
-        db.create_tables([User, Goal, Workout])
 
     # Register blueprints
     from .routes import main

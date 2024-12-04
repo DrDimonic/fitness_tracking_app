@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, FloatField, SelectField, IntegerField, SubmitField
+from wtforms import StringField, FloatField, SelectField, IntegerField, SubmitField, DateField
 from wtforms.validators import DataRequired, Length, Optional
-from peewee import Model, CharField, DateField, IntegerField, ForeignKeyField
 from . import db
 
 class SelectWorkoutTypeForm(FlaskForm):

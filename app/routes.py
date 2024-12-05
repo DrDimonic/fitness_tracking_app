@@ -120,3 +120,51 @@ def progress():
     except ValueError as e:
         # Display the error message in the template
         return render_template('progress.html', error_message=str(e))
+
+# Route for creating pie charts
+@main.route('/progress/pie_chart/<int:goal_id>')
+def pie_chart(goal_id):
+    goal = Goal.get_or_none(Goal.id == goal_id)
+    if not goal:
+        return "Goal not found", 404
+
+    workouts_completed = Workout.select().where(Workout.user == goal.user).count()
+    remaining = max(goal.target_value - workouts_completed, 0)
+
+    labels = ['Completed', 'Remaining']
+    sizes = [workouts_completed, remaining]
+    colors = ['#4CAF50', '#FF9999']  # Green and red
+
+    fig, ax = plt.subplots()
+    ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+    ax.axis('equal')
+
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plot_url = base64.b64encode(buffer.getvalue()).decode('utf8')
+    buffer.close()
+
+    return render_template('pie_chart.html', plot_url=plot_url, goal=goal)
+
+# Route for creating line charts
+@main.route('/progress/line_chart/<int:goal_id>')
+def line_chart(goal_id):
+    goal = Goal.get_or_none(Goal.id == goal_id)
+    if not goal:
+        return "Goal not found", 404
+
+    workouts = Workout.select().where(Workout.user == goal.user).order_by(Workout.date)
+    dates = [workout.date for workout in workouts]
+    progress = [sum(1 for _ in workouts if _.date <= date) for date in dates]
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=dates, y=progress, mode='lines+markers', name='Progress'))
+    fig.update_layout(
+        title=f"Progress for Goal: {goal.description}",
+        xaxis_title="Date",
+        yaxis_title="Cumulative Progress",
+        template="plotly_dark"
+    )
+
+    return render_template('line_chart.html', chart=fig.to_html(full_html=False), goal=goal)

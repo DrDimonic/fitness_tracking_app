@@ -62,10 +62,19 @@
 </head>
 <body>
     <header>Your Progress</header>
-    {% for item in progress_data %}
-        <h3>{{ item.goal }}</h3>
-        <p>Progress: {{ item.progress }}%</p>
+{% if goals %}
+    {% for goal in goals %}
+        <h3>{{ goal.description }}</h3>
+        <p>Target Value: {{ goal.target_value }}</p>
+        <p>Target Date: {{ goal.target_date }}</p>
+
+        <!-- Add chart links here -->
+        <a href="{{ url_for('main.pie_chart', goal_id=goal.id) }}">View Pie Chart</a> |
+        <a href="{{ url_for('main.line_chart', goal_id=goal.id) }}">View Line Chart</a>
     {% endfor %}
+{% else %}
+    <p>No goals available. Add a goal to start tracking progress!</p>
+{% endif %}
     <footer>
         <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>
     </footer>

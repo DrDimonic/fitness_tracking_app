@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pie Chart</title>
+</head>
+<body>
+    <header>Goal Progress</header>
+    <h3>{{ goal.description }}</h3>
+    <img src="data:image/png;base64,{{ plot_url }}" alt="Pie Chart">
+    <a href="{{ url_for('main.progress') }}">Back to Progress</a>
+</body>
+</html>

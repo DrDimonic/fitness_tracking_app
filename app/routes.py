@@ -191,6 +191,7 @@ def weekly_chart():
     ax.set_ylabel('Duration (minutes)', fontsize=18)
     ax.set_xlabel('Day', fontsize=18)
     ax.tick_params(axis='both', labelsize=16)
+    ax.set_ylim(0, 240)
 
     # Add value labels on top of bars
     for bar in bars:

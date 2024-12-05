@@ -63,6 +63,5 @@ class WeightliftingForm(FlaskForm):
 class GoalForm(FlaskForm):
     goal_description = StringField('Goal Description', validators=[DataRequired(), Length(max=100)])
     target_date = DateField('Target Date', format='%Y-%m-%d', validators=[DataRequired()])
-    target_value = IntegerField('Target Value (e.g., days, weeks, months)', validators=[DataRequired()])
     submit = SubmitField('Set Goal')
 

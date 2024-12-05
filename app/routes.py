@@ -85,10 +85,9 @@ def set_goal():
     if form.validate_on_submit():
         # Save the goal to the database
         Goal.create(
-            user=1,  # Replace with the actual user ID
+            user=current_user.id,
             description=form.goal_description.data,
             target_date=form.target_date.data,
-            target_value=form.target_value.data
         )
         flash('Goal set successfully!')
         return redirect(url_for('main.index'))

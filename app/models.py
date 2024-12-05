@@ -15,10 +15,9 @@ class User(Model, UserMixin):
         database = db
 
 class Goal(Model):
-    user = IntegerField()  # Replace with ForeignKeyField(User, backref="goals") if using relationships
+    user = IntegerField()  
     description = CharField()
     target_date = DateField()
-    target_value = IntegerField()
 
     class Meta:
         database = db

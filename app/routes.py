@@ -79,7 +79,8 @@ def log_run():
             user=current_user.id,
             workout_type="run",
             date=run_form.date.data,
-            duration=time,
+            distance=run_form.distance.data,
+            duration=run_form.duration.data, 
             intensity=None,
             exercise=None,
             weight=None,
@@ -147,12 +148,12 @@ def progress():
         relevant_workouts = user_workouts.where(Workout.date <= goal.target_date)
 
         if "Run" in goal.description:
-            # Extract target distance from the goal description
             match = re.search(r'\d+', goal.description)
             if match:
                 target_distance = int(match.group())
-                total_distance = sum(workout.duration for workout in relevant_workouts if workout.workout_type == "run")
+                total_distance = sum(workout.distance for workout in relevant_workouts if workout.workout_type == "run")
                 progress = min(int((total_distance / target_distance) * 100), 100)
+
             else:
                 progress = 0  # Default if no target is found
 
@@ -214,9 +215,11 @@ def weekly_chart():
     user_workouts = Workout.select().where(Workout.user == current_user.id)
 
     for workout in user_workouts:
-        day_name = workout.date.strftime('%A')  # Get the day name (e.g., "Monday")
-        if day_name in workout_durations:
-            workout_durations[day_name] += workout.duration or 0
+        day_name = workout.date.strftime('%A')
+        if workout.workout_type == 'run':
+            workout_durations[day_name] += workout.duration or 0  # Use duration for runs
+        elif workout.workout_type == 'weightlifting':
+            workout_durations[day_name] += workout.duration or 0  # Use duration for weightlifting
 
     # Create the bar chart
     fig, ax = plt.subplots(figsize=(25, 10))  # Set chart size (10 inches by 6 inches)

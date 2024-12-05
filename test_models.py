@@ -1,6 +1,8 @@
-import os
-from app.models import db, User, Goal, Workout
+from app.models import db, User, Workout, Goal
 from app import bcrypt
+from datetime import date
+import os
+
 
 def populate_test_data():
     # Initialize the database
@@ -8,29 +10,99 @@ def populate_test_data():
     db.init(db_path)  # Link the db object to the correct database file
     db.connect()
 
-    # Create tables if they don't already exist
-    db.create_tables([User, Goal, Workout], safe=True)
+    # Drop tables and recreate them for a clean slate
+    db.drop_tables([User, Workout, Goal], safe=True)
+    db.create_tables([User, Workout, Goal])
 
-    # Create some test users with hashed passwords
-    hashed_password1 = bcrypt.generate_password_hash("testpassword1").decode('utf-8')
-    hashed_password2 = bcrypt.generate_password_hash("testpassword2").decode('utf-8')
+    # Create test users
+    user1 = User.create(
+        username="testuser1",
+        email="test1@example.com",
+        password=bcrypt.generate_password_hash("password1").decode("utf-8")
+    )
+    user2 = User.create(
+        username="testuser2",
+        email="test2@example.com",
+        password=bcrypt.generate_password_hash("password2").decode("utf-8")
+    )
 
-    user1 = User.create(username="testuser1", email="test1@example.com", password=hashed_password1)
-    user2 = User.create(username="testuser2", email="test2@example.com", password=hashed_password2)
+    # Create goals for user1
+    Goal.create(
+        user=user1.id,
+        description="Run 50 miles in December",
+        target_date="2024-12-31"
+    )
+    Goal.create(
+        user=user1.id,
+        description="Lift 10,000 lbs this week",
+        target_date="2024-12-10"
+    )
+    Goal.create(
+        user=user1.id,
+        description="Workout 15 times this month",
+        target_date="2024-12-31"
+    )
 
-    # Add test goals for user1
-    Goal.create(user=user1.id, description="Run 50 miles in a month", target_date="2024-12-31", target_value=50)
-    Goal.create(user=user1.id, description="Lift 5000 lbs in a week", target_date="2024-12-15", target_value=5000)
+    # Add workouts for user1
+    Workout.create(
+        user=user1.id,
+        workout_type="run",
+        date=date(2024, 12, 1),
+        distance=5,  # miles
+        duration=50  # minutes
+    )
+    Workout.create(
+        user=user1.id,
+        workout_type="run",
+        date=date(2024, 12, 2),
+        distance=8,  # miles
+        duration=60  # minutes
+    )
+    Workout.create(
+        user=user1.id,
+        workout_type="weightlifting",
+        date=date(2024, 12, 3),
+        exercise="bench_press",
+        weight=200,
+        sets=5,
+        reps=10,
+        duration=30  # minutes
+    )
+    Workout.create(
+        user=user1.id,
+        workout_type="weightlifting",
+        date=date(2024, 12, 4),
+        exercise="squat",
+        weight=250,
+        sets=4,
+        reps=8,
+        duration=45  # minutes
+    )
 
-    # Add test workouts for user1
-    Workout.create(user=user1.id, workout_type="run", date="2024-12-01", duration=60, intensity=None, exercise=None, weight=None, sets=None)
-    Workout.create(user=user1.id, workout_type="weightlifting", date="2024-12-02", duration=None, intensity=None, exercise="bench_press", weight=200, sets=5, reps=3)
+    # Add workouts for user2
+    Workout.create(
+        user=user2.id,
+        workout_type="run",
+        date=date(2024, 12, 5),
+        distance=6,  # miles
+        duration=55  # minutes
+    )
+    Workout.create(
+        user=user2.id,
+        workout_type="weightlifting",
+        date=date(2024, 12, 6),
+        exercise="deadlift",
+        weight=300,
+        sets=3,
+        reps=5,
+        duration=40  # minutes
+    )
 
-    # Print success message
     print("Test data populated successfully!")
 
     # Close the database connection
     db.close()
+
 
 if __name__ == "__main__":
     populate_test_data()

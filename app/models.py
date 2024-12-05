@@ -1,4 +1,4 @@
-from peewee import Model, SqliteDatabase, CharField, DateField, IntegerField
+from peewee import Model, SqliteDatabase, CharField, DateField, IntegerField, FloatField, ForeignKeyField
 from flask_login import UserMixin
 
 # Define the database object
@@ -23,15 +23,15 @@ class Goal(Model):
         database = db
 
 class Workout(Model):
-    user = IntegerField()  # Replace with ForeignKeyField(User, backref="workouts") if using relationships
-    workout_type = CharField()
+    user = ForeignKeyField(User, backref='workouts')
+    workout_type = CharField()  # 'run' or 'weightlifting'
     date = DateField()
-    duration = IntegerField(null=True)  # For runs
-    intensity = CharField(null=True)   # For runs
-    exercise = CharField(null=True)    # For weightlifting
-    weight = IntegerField(null=True)   # For weightlifting
-    sets = IntegerField(null=True)     # For weightlifting
-    reps = IntegerField(null=True)     # New field for repetitions
+    distance = FloatField(null=True)  # Allow NULL for non-running workouts
+    duration = FloatField(null=True)  # Duration in minutes
+    exercise = CharField(null=True)  # Specific to weightlifting
+    weight = FloatField(null=True)
+    sets = IntegerField(null=True)
+    reps = IntegerField(null=True)
 
     class Meta:
         database = db

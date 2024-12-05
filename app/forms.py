@@ -13,7 +13,7 @@ class SelectWorkoutTypeForm(FlaskForm):
 class RunForm(FlaskForm):
     date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
     distance = FloatField('Distance (miles)', validators=[DataRequired()])
-    time = FloatField('Time (minutes)', validators=[DataRequired()])
+    duration = FloatField('Time (minutes)', validators=[DataRequired()])
     submit = SubmitField('Log Run')
 
 class WeightliftingForm(FlaskForm):

@@ -15,6 +15,9 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
     
+    # Make sessions temporary
+    app.config['SESSION_PERMANENT'] = False  
+    
     # Set the database path
     app.config['DATABASE'] = os.path.join(os.path.dirname(__file__), 'databases', 'fitness_app.db')
 

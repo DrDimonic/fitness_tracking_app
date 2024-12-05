@@ -43,6 +43,21 @@
             color: white;
             font-size: 14px;
             line-height: 20px;
+            transition: background-color 0.3s ease;
+            overflow: hidden; /* Ensure no stray content is visible */
+        }
+
+        .btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: darkred;
         }
 
         footer {
@@ -69,12 +84,23 @@
     {% if progress_data %}
         {% for item in progress_data %}
             <h3>{{ item.goal }}</h3>
+            <p>Target Date: {{ item.target_date }}</p>
             <p>Progress: {{ item.progress }}%</p>
             <div class="progress-container">
-                <div class="progress-bar" style="width: {{ item.progress }}%;">
-                    {{ item.progress }}%
+                <div 
+                    class="progress-bar" 
+                    style="width: {{ item.progress }}%; background-color: {% if item.progress >= 100 %}#4CAF50{% else %}#FFD700{% endif %};"
+                >
+                    {% if item.progress >= 100 %}
+                        Congratulations!
+                    {% else %}
+                        {{ item.progress }}%
+                    {% endif %}
                 </div>
             </div>
+            <form method="POST" action="{{ url_for('main.delete_goal', goal_id=item.goal_id) }}" onsubmit="return confirmDelete();">
+                <button type="submit" class="btn">Delete Goal: "{{ item.goal }}"</button>
+            </form>
         {% endfor %}
         <a href="{{ url_for('main.weekly_chart') }}" class="link">View Weekly Workout Chart</a>
     {% else %}
@@ -83,5 +109,10 @@
     <footer>
         <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>
     </footer>
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this goal?");
+        }
+    </script>
 </body>
 </html>

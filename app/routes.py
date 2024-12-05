@@ -97,40 +97,74 @@ def set_goal():
 @main.route('/progress')
 @login_required
 def progress():
+    import re
+    from datetime import datetime
+
+    # Fetch user's goals and workouts
     user_goals = Goal.select().where(Goal.user == current_user.id)
     user_workouts = Workout.select().where(Workout.user == current_user.id)
 
     progress_data = []
-    current_month = datetime.datetime.now().month
-    current_year = datetime.datetime.now().year
+    today = datetime.now()
 
     for goal in user_goals:
+        # Filter workouts up to the target date
+        relevant_workouts = user_workouts.where(Workout.date <= goal.target_date)
+
         if "Run" in goal.description:
-            total_distance = sum(workout.duration for workout in user_workouts if workout.workout_type == "run")
-            progress = min(int((total_distance / goal.target_value) * 100), 100)
+            # Extract target distance from the goal description
+            match = re.search(r'\d+', goal.description)
+            if match:
+                target_distance = int(match.group())
+                total_distance = sum(workout.duration for workout in relevant_workouts if workout.workout_type == "run")
+                progress = min(int((total_distance / target_distance) * 100), 100)
+            else:
+                progress = 0  # Default if no target is found
 
         elif "Lift" in goal.description:
-            total_weight = sum(workout.weight for workout in user_workouts if workout.workout_type == "weightlifting")
-            progress = min(int((total_weight / goal.target_value) * 100), 100)
+            # Extract target weight from the goal description
+            match = re.search(r'\d+', goal.description)
+            if match:
+                target_weight = int(match.group())
+                total_weight = sum(workout.weight for workout in relevant_workouts if workout.workout_type == "weightlifting")
+                progress = min(int((total_weight / target_weight) * 100), 100)
+            else:
+                progress = 0  # Default if no target is found
 
         elif "workout" in goal.description.lower():
+            # Handle workout frequency goals
             match = re.search(r'\d+', goal.description)
             if match:
                 target_workouts = int(match.group())
-                monthly_workouts = sum(1 for workout in user_workouts if workout.date.month == current_month and workout.date.year == current_year)
+                monthly_workouts = sum(1 for workout in relevant_workouts if workout.date.month == today.month and workout.date.year == today.year)
                 progress = min(int((monthly_workouts / target_workouts) * 100), 100)
             else:
-                progress = 0
+                progress = 0  # Default if no target is found
 
         else:
-            progress = 0
+            progress = 0  # Default for unrecognized goal types
 
+        # Append progress data
         progress_data.append({
+            'goal_id': goal.id,
             'goal': goal.description,
             'progress': progress,
+            'target_date': goal.target_date,
         })
 
     return render_template('progress.html', progress_data=progress_data)
+
+# Route for removing goals
+@main.route('/delete_goal/<int:goal_id>', methods=['POST'])
+@login_required
+def delete_goal(goal_id):
+    goal = Goal.get_or_none(Goal.id == goal_id, Goal.user == current_user.id)
+    if goal:
+        goal.delete_instance()
+        flash('Goal deleted successfully.', 'success')
+    else:
+        flash('Goal not found or unauthorized.', 'danger')
+    return redirect(url_for('main.progress'))
 
 
 # Route for weekly workout progress chart

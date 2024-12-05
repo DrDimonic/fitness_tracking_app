@@ -2,7 +2,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .forms import SelectWorkoutTypeForm, RunForm, WeightliftingForm, GoalForm
 from .models import Goal, Workout, User
 from flask_login import login_required, current_user
-
+import matplotlib.pyplot as plt
+import io
+import base64
 
 # Blueprint for the main routes
 main = Blueprint('main', __name__)
@@ -95,76 +97,50 @@ def set_goal():
 @main.route('/progress')
 @login_required
 def progress():
-    try:
-        # Fetch the user's goals and workouts
-        user_goals = Goal.select().where(Goal.user == 1)  # Replace with actual user ID
-        user_workouts = Workout.select().where(Workout.user == 1)
-        
-        if not user_goals.exists() or not user_workouts.exists():
-            # If no goals or workouts, raise an exception
-            raise ValueError("No progress data available. Please add goals or log workouts first.")
-        
-        # Process data to calculate progress
-        progress_data = []
-        for goal in user_goals:
-            # Example: count workouts towards a goal
-            workouts_completed = user_workouts.count()
-            percentage = min(int((workouts_completed / goal.target_value) * 100), 100)
-            progress_data.append({
-                'goal': goal.description,
-                'progress': percentage
-            })
-        
-        return render_template('progress.html', progress_data=progress_data)
+    user_goals = Goal.select().where(Goal.user == current_user.id)
+    user_workouts = Workout.select().where(Workout.user == current_user.id)
 
-    except ValueError as e:
-        # Display the error message in the template
-        return render_template('progress.html', error_message=str(e))
+    progress_data = []
+    for goal in user_goals:
+        workouts_completed = user_workouts.count()
+        percentage = min(int((workouts_completed / goal.target_value) * 100), 100)
+        progress_data.append({
+            'description': goal.description,
+            'target_value': goal.target_value,
+            'target_date': goal.target_date,
+            'percentage': percentage,
+        })
 
-# Route for creating pie charts
-@main.route('/progress/pie_chart/<int:goal_id>')
-def pie_chart(goal_id):
-    goal = Goal.get_or_none(Goal.id == goal_id)
-    if not goal:
-        return "Goal not found", 404
+    return render_template('progress.html', goals=progress_data)
 
-    workouts_completed = Workout.select().where(Workout.user == goal.user).count()
-    remaining = max(goal.target_value - workouts_completed, 0)
+# Route for weekly workout progress chart
+@main.route('/progress/weekly_chart')
+@login_required
+def weekly_chart():
+    # Initialize the week (Sunday to Saturday)
+    week_days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    workout_durations = {day: 0 for day in week_days}
 
-    labels = ['Completed', 'Remaining']
-    sizes = [workouts_completed, remaining]
-    colors = ['#4CAF50', '#FF9999']  # Green and red
+    # Fetch user's workouts
+    user_workouts = Workout.select().where(Workout.user == current_user.id)
 
+    for workout in user_workouts:
+        day_name = workout.date.strftime('%A')  # Get the day name (e.g., "Monday")
+        if day_name in workout_durations:
+            workout_durations[day_name] += workout.duration or 0
+
+    # Create the bar chart
     fig, ax = plt.subplots()
-    ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
-    ax.axis('equal')
+    ax.bar(workout_durations.keys(), workout_durations.values(), color='blue')
+    ax.set_title('Workout Duration by Day of the Week')
+    ax.set_ylabel('Duration (minutes)')
+    ax.set_xlabel('Day of the Week')
 
+    # Save the chart to a buffer
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
-    plot_url = base64.b64encode(buffer.getvalue()).decode('utf8')
+    chart_url = base64.b64encode(buffer.getvalue()).decode('utf8')
     buffer.close()
 
-    return render_template('pie_chart.html', plot_url=plot_url, goal=goal)
-
-# Route for creating line charts
-@main.route('/progress/line_chart/<int:goal_id>')
-def line_chart(goal_id):
-    goal = Goal.get_or_none(Goal.id == goal_id)
-    if not goal:
-        return "Goal not found", 404
-
-    workouts = Workout.select().where(Workout.user == goal.user).order_by(Workout.date)
-    dates = [workout.date for workout in workouts]
-    progress = [sum(1 for _ in workouts if _.date <= date) for date in dates]
-
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=dates, y=progress, mode='lines+markers', name='Progress'))
-    fig.update_layout(
-        title=f"Progress for Goal: {goal.description}",
-        xaxis_title="Date",
-        yaxis_title="Cumulative Progress",
-        template="plotly_dark"
-    )
-
-    return render_template('line_chart.html', chart=fig.to_html(full_html=False), goal=goal)
+    return render_template('weekly_chart.html', chart_url=chart_url)

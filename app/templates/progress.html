@@ -16,7 +16,7 @@
             color: #ffffff; /* White text for contrast */
             font-size: 20px; /* Larger font size */
         }
-    
+
         header {
             width: 100%;
             background-color: #4CAF50; /* Green ribbon */
@@ -26,21 +26,21 @@
             font-size: 1.5em;
             font-weight: bold;
         }
-    
+
         form {
             text-align: center;
             margin-top: 10px;
         }
-    
+
         p, label {
             margin: 30px 0; /* Adds spacing between sections */
         }
-    
+
         .btn {
             all: unset; /* Resets the button to its plain default style */
             cursor: pointer; /* Ensures pointer cursor on hover */
         }
-    
+
         footer {
             width: 100%;
             text-align: center;
@@ -48,33 +48,52 @@
             padding: 15px;
             background-color: #1a1a1a; /* Darker gray footer */
         }
-    
+
         .link {
             color: #5A9BD5; /* Blue between royal and light blue */
             text-decoration: none;
             margin-top: 20px;
         }
-    
+
         .link:hover {
             text-decoration: underline;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 25px;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #4CAF50;
+            width: 0;
+            border-radius: 25px;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            line-height: 20px;
         }
     </style>    
 </head>
 <body>
     <header>Your Progress</header>
-{% if goals %}
-    {% for goal in goals %}
-        <h3>{{ goal.description }}</h3>
-        <p>Target Value: {{ goal.target_value }}</p>
-        <p>Target Date: {{ goal.target_date }}</p>
-
-        <!-- Add chart links here -->
-        <a href="{{ url_for('main.pie_chart', goal_id=goal.id) }}">View Pie Chart</a> |
-        <a href="{{ url_for('main.line_chart', goal_id=goal.id) }}">View Line Chart</a>
-    {% endfor %}
-{% else %}
-    <p>No goals available. Add a goal to start tracking progress!</p>
-{% endif %}
+    {% if progress_data %}
+        {% for item in progress_data %}
+            <h3>{{ item.goal }}</h3>
+            <p>Progress: {{ item.progress }}%</p>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: {{ item.progress }}%;">
+                    {{ item.progress }}%
+                </div>
+            </div>
+        {% endfor %}
+        <a href="{{ url_for('main.weekly_chart') }}" class="link">View Weekly Workout Chart</a>
+    {% else %}
+        <p>No progress data available. Add goals and workouts to see progress!</p>
+    {% endif %}
     <footer>
         <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>
     </footer>

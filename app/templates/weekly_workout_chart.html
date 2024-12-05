@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weekly Progress</title>
+</head>
+<body>
+    <header>Weekly Workout Progress</header>
+    <img src="data:image/png;base64,{{ chart_url }}" alt="Weekly Chart">
+    <footer>
+        <a href="{{ url_for('main.progress') }}">Back to Progress</a>
+    </footer>
+</body>
+</html>

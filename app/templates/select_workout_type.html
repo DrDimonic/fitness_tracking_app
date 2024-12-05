@@ -58,17 +58,70 @@
         .link:hover {
             text-decoration: underline;
         }
-    </style>    
+        #workout-details {
+            margin-top: 20px;
+            background-color: #1a1a1a;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <header>Select Workout Type</header>
     <form method="POST">
         {{ form.hidden_tag() }}
-        <p>{{ form.workout_type.label }}<br>{{ form.workout_type() }}</p>
-        <p><button class="btn">{{ form.submit() }}</button></p>
+        <label for="workout_type">Workout Type:</label>
+        {{ form.workout_type }}
+        <button type="submit">Continue</button>
     </form>
+
+    <!-- Dropdown for all past workouts -->
+    <h2>Past Workouts</h2>
+    <select id="workout-dropdown" onchange="showWorkoutDetails()">
+        <option value="">Select a workout</option>
+        {% for workout in all_workouts %}
+            <option value="{{ workout.id }}" data-type="{{ workout.type }}" data-details="{{ workout.details }}">
+                {{ workout.date }} - {{ workout.type.capitalize() }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Workout Details -->
+    <div id="workout-details">
+        <h3>Workout Details</h3>
+        <p id="workout-info"></p>
+        <form id="delete-workout-form" method="POST">
+            <button type="submit" class="btn">Delete Workout</button>
+        </form>
+    </div>
+
     <footer>
         <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>
     </footer>
+
+    <script>
+        const workoutDropdown = document.getElementById('workout-dropdown');
+        const workoutDetailsDiv = document.getElementById('workout-details');
+        const workoutInfo = document.getElementById('workout-info');
+        const deleteWorkoutForm = document.getElementById('delete-workout-form');
+
+        function showWorkoutDetails() {
+            const selectedOption = workoutDropdown.options[workoutDropdown.selectedIndex];
+            if (!selectedOption.value) {
+                workoutDetailsDiv.style.display = 'none';
+                workoutInfo.textContent = '';
+                deleteWorkoutForm.action = '';
+                return;
+            }
+
+            const details = selectedOption.getAttribute('data-details');
+            const workoutId = selectedOption.value;
+
+            workoutDetailsDiv.style.display = 'block';
+            workoutInfo.textContent = details;
+            deleteWorkoutForm.action = `/delete_workout/${workoutId}`;
+        }
+    </script>
 </body>
 </html>

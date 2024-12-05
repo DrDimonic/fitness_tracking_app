@@ -23,12 +23,47 @@ def index():
 @login_required
 def log_workout():
     select_form = SelectWorkoutTypeForm()
+    user_workouts = Workout.select().where(Workout.user == current_user.id)
+
+    # Serialize workouts for display
+    all_workouts = [
+        {
+            'id': workout.id,
+            'type': workout.workout_type,
+            'date': workout.date.strftime('%Y-%m-%d'),
+            'details': (
+                f"Distance: {workout.duration} miles, Time: {workout.duration} minutes"
+                if workout.workout_type == "run"
+                else f"Exercise: {workout.exercise}, Weight: {workout.weight} lbs, Sets: {workout.sets}, Reps: {workout.reps}"
+            )
+        }
+        for workout in user_workouts
+    ]
+
     if select_form.validate_on_submit():
         if select_form.workout_type.data == 'run':
             return redirect(url_for('main.log_run'))
         elif select_form.workout_type.data == 'weightlifting':
             return redirect(url_for('main.log_weightlifting'))
-    return render_template('select_workout_type.html', form=select_form)
+    
+    return render_template(
+        'select_workout_type.html',
+        form=select_form,
+        all_workouts=all_workouts
+    )
+
+# Route for deleting workouts
+@main.route('/delete_workout/<int:workout_id>', methods=['POST'])
+@login_required
+def delete_workout(workout_id):
+    workout = Workout.get_or_none(Workout.id == workout_id, Workout.user == current_user.id)
+    if workout:
+        workout.delete_instance()
+        flash('Workout deleted successfully.', 'success')
+    else:
+        flash('Workout not found or unauthorized.', 'danger')
+    return redirect(url_for('main.log_workout'))
+
 
 # Route for logging a run
 @main.route('/log_workout/run', methods=['GET', 'POST'])

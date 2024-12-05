@@ -22,7 +22,7 @@
             background-color: green;
             padding: 25px;
             text-align: center;
-            color: black;
+            color: white;
             font-size: 1.7em;
             font-weight: bold;
         }
@@ -64,7 +64,7 @@
     <header>Weekly Workout Progress</header>
     <img src="data:image/png;base64,{{ chart_url }}" alt="Weekly Chart">
     <footer>
-        <a href="{{ url_for('main.progress') }}">Back to Progress</a>
+        <a href="{{ url_for('main.progress') }}" class="link">Back to Progress</a>
     </footer>
 </body>
 </html>

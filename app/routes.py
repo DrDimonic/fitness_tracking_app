@@ -3,8 +3,12 @@ from .forms import SelectWorkoutTypeForm, RunForm, WeightliftingForm, GoalForm
 from .models import Goal, Workout, User
 from flask_login import login_required, current_user
 import matplotlib.pyplot as plt
+import matplotlib
 import io
 import base64
+import datetime
+
+matplotlib.use('Agg')
 
 # Blueprint for the main routes
 main = Blueprint('main', __name__)
@@ -28,57 +32,54 @@ def log_workout():
 
 # Route for logging a run
 @main.route('/log_workout/run', methods=['GET', 'POST'])
+@login_required
 def log_run():
     run_form = RunForm()
     if run_form.validate_on_submit():
-        # Calculate calories burned and average speed
         distance = run_form.distance.data
         time = run_form.time.data
-        avg_speed = distance / (time / 60)  # Average speed in mph
-        calories_burned = distance * 100  # Approximate calorie burn
 
-        # Save to database (example only)
-        flash(f"Run logged! Calories burned: {calories_burned} | Avg speed: {avg_speed:.2f} mph")
+        # Save the workout with the current user's ID
+        Workout.create(
+            user=current_user.id,
+            workout_type="run",
+            date=run_form.date.data,
+            duration=time,
+            intensity=None,
+            exercise=None,
+            weight=None,
+            sets=None,
+            reps=None
+        )
+
+        flash("Run logged successfully!")
         return redirect(url_for('main.log_workout'))
     return render_template('log_run.html', form=run_form)
 
+
 # Route for logging a lift
 @main.route('/log_workout/weightlifting', methods=['GET', 'POST'])
+@login_required
 def log_weightlifting():
     lifting_form = WeightliftingForm()
     if lifting_form.validate_on_submit():
-        # Get user input
-        exercise = lifting_form.exercise.data
-        if exercise == 'custom':
-            exercise = lifting_form.custom_exercise.data
-
-        weight = lifting_form.weight.data
-        sets = lifting_form.sets.data
-        reps = lifting_form.reps.data  # Capture repetitions
-        difficulty = lifting_form.difficulty.data
-
-        # Calculate calories burned (example logic)
-        difficulty_multiplier = {'easy': 3, 'moderate': 5, 'hard': 8}
-        calories_burned = sets * reps * weight * difficulty_multiplier[difficulty]
-
-        # Save to database
         Workout.create(
             user=current_user.id,
             workout_type="weightlifting",
             date=lifting_form.date.data,
-            exercise=exercise,
-            weight=weight,
-            sets=sets,
-            reps=reps,
-            intensity=None
+            exercise=lifting_form.exercise.data,
+            weight=lifting_form.weight.data,
+            sets=lifting_form.sets.data,
+            reps=lifting_form.reps.data
         )
 
-        flash(f"Weightlifting logged! Calories burned: {calories_burned}")
+        flash("Weightlifting logged successfully!")
         return redirect(url_for('main.log_workout'))
     return render_template('log_weightlifting.html', form=lifting_form)
 
 # Route for goal setting
 @main.route('/set_goal', methods=['GET', 'POST'])
+@login_required
 def set_goal():
     form = GoalForm()
     if form.validate_on_submit():
@@ -101,17 +102,37 @@ def progress():
     user_workouts = Workout.select().where(Workout.user == current_user.id)
 
     progress_data = []
+    current_month = datetime.datetime.now().month
+    current_year = datetime.datetime.now().year
+
     for goal in user_goals:
-        workouts_completed = user_workouts.count()
-        percentage = min(int((workouts_completed / goal.target_value) * 100), 100)
+        if "Run" in goal.description:
+            total_distance = sum(workout.duration for workout in user_workouts if workout.workout_type == "run")
+            progress = min(int((total_distance / goal.target_value) * 100), 100)
+
+        elif "Lift" in goal.description:
+            total_weight = sum(workout.weight for workout in user_workouts if workout.workout_type == "weightlifting")
+            progress = min(int((total_weight / goal.target_value) * 100), 100)
+
+        elif "workout" in goal.description.lower():
+            match = re.search(r'\d+', goal.description)
+            if match:
+                target_workouts = int(match.group())
+                monthly_workouts = sum(1 for workout in user_workouts if workout.date.month == current_month and workout.date.year == current_year)
+                progress = min(int((monthly_workouts / target_workouts) * 100), 100)
+            else:
+                progress = 0
+
+        else:
+            progress = 0
+
         progress_data.append({
-            'description': goal.description,
-            'target_value': goal.target_value,
-            'target_date': goal.target_date,
-            'percentage': percentage,
+            'goal': goal.description,
+            'progress': progress,
         })
 
-    return render_template('progress.html', goals=progress_data)
+    return render_template('progress.html', progress_data=progress_data)
+
 
 # Route for weekly workout progress chart
 @main.route('/progress/weekly_chart')
@@ -132,9 +153,9 @@ def weekly_chart():
     # Create the bar chart
     fig, ax = plt.subplots()
     ax.bar(workout_durations.keys(), workout_durations.values(), color='blue')
-    ax.set_title('Workout Duration by Day of the Week')
+    ax.set_title('Weekly Workout Progress')
     ax.set_ylabel('Duration (minutes)')
-    ax.set_xlabel('Day of the Week')
+    ax.set_xlabel('Day')
 
     # Save the chart to a buffer
     buffer = io.BytesIO()
@@ -143,4 +164,4 @@ def weekly_chart():
     chart_url = base64.b64encode(buffer.getvalue()).decode('utf8')
     buffer.close()
 
-    return render_template('weekly_chart.html', chart_url=chart_url)
+    return render_template('weekly_workout_chart.html', chart_url=chart_url)

@@ -13,16 +13,16 @@
             justify-content: flex-start;
             min-height: 100vh;
             background-color: #2c2c2c; /* Dark gray background */
-            color: #ffffff; /* White text for contrast */
+            color: white;
         }
     
         header {
             width: 100%;
-            background-color: #4CAF50; /* Green strip across the top */
+            background-color: green; 
             padding: 20px;
             text-align: center;
             color: white;
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: bold;
         }
     
@@ -32,16 +32,24 @@
         }
     
         p, label {
-            margin: 20px 0; /* Adds spacing between sections */
+            margin: 20px 0; 
         }
     
         .btn {
-            all: unset; /* Resets the button to its plain default style */
-            cursor: pointer; /* Ensures pointer cursor on hover */
+            all: unset; 
+            cursor: pointer; 
         }
     
+        footer {
+            width: 100%;
+            text-align: center;
+            margin-top: auto;
+            padding: 15px;
+            background-color: black; /* Darker gray footer */
+        }
+        
         .link {
-            color: #5A9BD5;
+            color: deepskyblue;
             text-decoration: none;
             margin-top: 20px;
         }
@@ -57,7 +65,7 @@
         {{ form.hidden_tag() }}
         <p>{{ form.workout_type.label }}<br>{{ form.workout_type(size=32) }}</p>
         <p>{{ form.date.label }}<br>{{ form.date() }}</p>
-        <p>{{ form.duration.label }}<br>{{ form.duration() }}</p> <!-- Dropdown -->
+        <p>{{ form.duration.label }}<br>{{ form.duration() }}</p> 
         <p>{{ form.intensity.label }}<br>{{ form.intensity(size=32) }}</p>
         <p>{{ form.notes.label }}<br>{{ form.notes(cols=30, rows=5) }}</p>
         <p>{{ form.submit() }}</p>

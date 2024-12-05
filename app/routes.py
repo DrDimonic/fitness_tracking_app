@@ -151,15 +151,22 @@ def weekly_chart():
             workout_durations[day_name] += workout.duration or 0
 
     # Create the bar chart
-    fig, ax = plt.subplots()
-    ax.bar(workout_durations.keys(), workout_durations.values(), color='blue')
-    ax.set_title('Weekly Workout Progress')
-    ax.set_ylabel('Duration (minutes)')
-    ax.set_xlabel('Day')
+    fig, ax = plt.subplots(figsize=(25, 10))  # Set chart size (10 inches by 6 inches)
+    bars = ax.bar(workout_durations.keys(), workout_durations.values(), color='blue')  # Green bars
+
+    # Customize the chart
+    ax.set_ylabel('Duration (minutes)', fontsize=18)
+    ax.set_xlabel('Day', fontsize=18)
+    ax.tick_params(axis='both', labelsize=16)
+
+    # Add value labels on top of bars
+    for bar in bars:
+        yval = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, yval + 1, int(yval), ha='center', fontsize=12)
 
     # Save the chart to a buffer
     buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
+    plt.savefig(buffer, format='png', bbox_inches='tight')  # Ensure tight layout
     buffer.seek(0)
     chart_url = base64.b64encode(buffer.getvalue()).decode('utf8')
     buffer.close()

@@ -5,6 +5,62 @@
 </head>
 <body>
     <header>Register</header>
+
+    <!-- Styling for the page layout and design -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #2c2c2c; /* Dark gray background */
+            color: white; /* White text for contrast */
+        }
+
+        form {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkgreen;
+        }
+
+        .link {
+            color: deepskyblue;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+    
     <form method="POST">
         <p><label>Username:</label><br><input type="text" name="username" required></p>
         <p><label>Email:</label><br><input type="email" name="email" required></p>

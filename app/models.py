@@ -1,11 +1,10 @@
 from peewee import Model, SqliteDatabase, CharField, DateField, IntegerField, FloatField, ForeignKeyField
 from flask_login import UserMixin
 
-# Define the database object
+# Define database connection
 db = SqliteDatabase(None)  # Database initialization will happen later
 
-
-
+# User model for storing user information
 class User(Model, UserMixin):
     username = CharField(unique=True, max_length=50)
     email = CharField(unique=True)
@@ -14,6 +13,7 @@ class User(Model, UserMixin):
     class Meta:
         database = db
 
+# Goal model for tracking user goals
 class Goal(Model):
     user = IntegerField()  
     description = CharField()
@@ -22,6 +22,7 @@ class Goal(Model):
     class Meta:
         database = db
 
+# Workout model for logging user workouts
 class Workout(Model):
     user = ForeignKeyField(User, backref='workouts')
     workout_type = CharField()  # 'run' or 'weightlifting'

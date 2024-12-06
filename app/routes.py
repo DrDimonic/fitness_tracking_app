@@ -7,14 +7,15 @@ import io
 import base64
 from datetime import datetime
 
+# Blueprint for main application routes
 main = Blueprint('main', __name__)
 
-# Render homepage
+# Render the fitness app homepage
 @main.route('/')
 def index():
     return render_template('index.html')
 
-# Log workout
+# Route for logging workout type and viewing past workouts
 @main.route('/log_workout', methods=['GET', 'POST'])
 @login_required
 def log_workout():
@@ -23,7 +24,7 @@ def log_workout():
     # Fetch workouts for the current user and sort by date (descending)
     user_workouts = Workout.select().where(Workout.user == current_user.id).order_by(Workout.date.desc())
 
-    # Serialize workouts for display
+    # Dropdown that lists all past workouts logged
     all_workouts = [
         {
             'id': workout.id,
@@ -38,6 +39,7 @@ def log_workout():
         for workout in user_workouts
     ]
 
+    # Redirect based on selected workout type
     if select_form.validate_on_submit():
         if select_form.workout_type.data == 'run':
             return redirect(url_for('main.log_run'))
@@ -50,9 +52,7 @@ def log_workout():
         all_workouts=all_workouts
     )
 
-
-
-# Delete workout
+# Delete a past workout
 @main.route('/delete_workout/<int:workout_id>', methods=['POST'])
 @login_required
 def delete_workout(workout_id):
@@ -64,7 +64,7 @@ def delete_workout(workout_id):
         flash('Workout not found or unauthorized.', 'danger')
     return redirect(url_for('main.log_workout'))
 
-# Log run
+# Route for logging a run
 @main.route('/log_workout/run', methods=['GET', 'POST'])
 @login_required
 def log_run():
@@ -81,7 +81,7 @@ def log_run():
         return redirect(url_for('main.log_workout'))
     return render_template('log_run.html', form=run_form)
 
-# Log weightlifting
+# Route for logging weightlifting
 @main.route('/log_workout/weightlifting', methods=['GET', 'POST'])
 @login_required
 def log_weightlifting():
@@ -134,7 +134,7 @@ def delete_goal(goal_id):
         flash('Goal not found or unauthorized.', 'danger')
     return redirect(url_for('main.progress'))
 
-# View progress
+# Route to view progress
 @main.route('/progress')
 @login_required
 def progress():
@@ -149,7 +149,7 @@ def progress():
     today = datetime.now()
 
     for goal in user_goals:
-        progress = 0  # Default progress to 0%
+        progress = 0  
         relevant_workouts = user_workouts.where(Workout.date <= goal.target_date)
 
         if "Run" in goal.description:
@@ -164,6 +164,7 @@ def progress():
         elif "Lift" in goal.description:
             # Extract target weight from the goal description
             match = re.search(r'\d+', goal.description)
+
             if match:
                 target_weight = int(match.group())
                 total_weight = sum(workout.weight or 0 for workout in relevant_workouts if workout.workout_type == "weightlifting")
@@ -173,13 +174,14 @@ def progress():
         elif "workout" in goal.description.lower():
             # Handle workout frequency goals
             match = re.search(r'\d+', goal.description)
+
             if match:
                 target_workouts = int(match.group())
                 monthly_workouts = sum(1 for workout in relevant_workouts if workout.date.month == today.month and workout.date.year == today.year)
                 progress = min(int((monthly_workouts / target_workouts) * 100), 100)
                 print(f"[DEBUG] Goal: {goal.description}, Target Workouts: {target_workouts}, Monthly Workouts: {monthly_workouts}, Progress: {progress}%")
 
-        # Append the computed progress for each goal
+        # Append the progress for each goal
         progress_data.append({
             'goal_id': goal.id,
             'goal': goal.description,
@@ -187,11 +189,10 @@ def progress():
             'target_date': goal.target_date,
         })
 
-    # Render the progress template with the calculated data
     return render_template('progress.html', progress_data=progress_data)
 
 
-# Weekly workout progress chart
+# Route for the weekly workout progress graph
 @main.route('/progress/weekly_chart')
 @login_required
 def weekly_chart():

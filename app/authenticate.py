@@ -3,8 +3,10 @@ from flask_login import login_user, logout_user, login_required
 from .models import User
 from . import bcrypt
 
+# Blueprint for authentication routes
 auth = Blueprint('auth', __name__)
 
+# Route to handle user registration
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -12,7 +14,7 @@ def register():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # Hash the password
+        # Hash the password for secure storage
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
         # Create a new user
@@ -25,6 +27,7 @@ def register():
 
     return render_template('register.html')
 
+# Route to handle user login
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -41,6 +44,7 @@ def login():
 
     return render_template('login.html')
 
+# Route to handle user logout
 @auth.route('/logout', methods=['POST'])
 @login_required
 def logout():

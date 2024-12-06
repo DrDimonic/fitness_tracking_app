@@ -3,6 +3,7 @@ from wtforms import StringField, FloatField, SelectField, IntegerField, SubmitFi
 from wtforms.validators import DataRequired, Length, Optional, NumberRange
 from . import db
 
+# Form for selecting workout type
 class SelectWorkoutTypeForm(FlaskForm):
     workout_type = SelectField(
         choices=[('run', 'Running'), ('weightlifting', 'Weightlifting')],
@@ -10,12 +11,14 @@ class SelectWorkoutTypeForm(FlaskForm):
     )
     submit = SubmitField('Next')
 
+# Form for logging a run
 class RunForm(FlaskForm):
     date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
     distance = FloatField('Distance (miles)', validators=[DataRequired()])
     duration = FloatField('Time (minutes)', validators=[DataRequired()])
     submit = SubmitField('Log Run')
 
+# Form for logging weightlifting
 class WeightliftingForm(FlaskForm):
     date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
     exercise = SelectField(
@@ -61,6 +64,7 @@ class WeightliftingForm(FlaskForm):
     )
     submit = SubmitField('Log Weightlifting')
 
+# Form for setting a goal
 class GoalForm(FlaskForm):
     goal_description = StringField('Goal Description', validators=[DataRequired(), Length(max=100)])
     target_date = DateField('Target Date', format='%Y-%m-%d', validators=[DataRequired()])

@@ -21,11 +21,12 @@ def log_workout():
     select_form = SelectWorkoutTypeForm()
     user_workouts = Workout.select().where(Workout.user == current_user.id)
 
+    # Serialize workouts for display
     all_workouts = [
         {
             'id': workout.id,
             'type': workout.workout_type,
-            'date': workout.date.strftime('%Y-%m-%d'),
+            'date': f"{'Run' if workout.workout_type == 'run' else 'Lift'} - {workout.date.strftime('%Y-%m-%d')}",
             'details': (
                 f"Distance: {workout.distance} miles, Duration: {workout.duration} minutes"
                 if workout.workout_type == "run"
@@ -41,7 +42,12 @@ def log_workout():
         elif select_form.workout_type.data == 'weightlifting':
             return redirect(url_for('main.log_weightlifting'))
 
-    return render_template('select_workout_type.html', form=select_form, all_workouts=all_workouts)
+    return render_template(
+        'select_workout_type.html',
+        form=select_form,
+        all_workouts=all_workouts
+    )
+
 
 # Delete workout
 @main.route('/delete_workout/<int:workout_id>', methods=['POST'])

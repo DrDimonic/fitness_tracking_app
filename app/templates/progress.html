@@ -14,12 +14,12 @@
             min-height: 100vh;
             background-color: #2c2c2c; /* Dark gray background */
             color: white; 
-            font-size: 20px; 
+            font-size: 18px; 
         }
         header {
             width: 100%;
             background-color: green; 
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             color: white;
             font-size: 1.6em;
@@ -36,8 +36,8 @@
             background-color: gold;
             border-radius: 25px;
             text-align: center;
-            color: white;
-            font-size: 14px;
+            color: black;
+            font-size: 16px;
             line-height: 20px;
             transition: background-color 0.3s ease, width 0.3s ease;
         }
@@ -61,6 +61,7 @@
             margin-top: auto;
             padding: 15px;
             background-color: black; 
+            font-size: 12pt;
         }
         .link {
             color: deepskyblue; 
@@ -77,17 +78,25 @@
     {% if progress_data %}
         {% for item in progress_data %}
             <h3>{{ item.goal }}</h3>
-            <p>Target Date: {{ item.target_date }}</p>
+            Target Date: {{ item.target_date }}
             <div class="progress-container">
-                <div class="progress-bar" style="width: {{ item.progress }}%;" data-progress="{{ item.progress }}">
-                    {{ 'Congratulations!' if item.progress >= 100 else item.progress ~ '%' }}
+                <div 
+                    class="progress-bar" 
+                    data-progress="{{ item.progress | default(0) | int }}" 
+                    style="width: 0%;"
+                >
+                    {% if item.progress >= 100 %}
+                        Congratulations!
+                    {% else %}
+                        {{ item.progress | default(0) | int }}%
+                    {% endif %}
                 </div>
             </div>
             <form method="POST" action="{{ url_for('main.delete_goal', goal_id=item.goal_id) }}" onsubmit="return confirmDelete();">
-                <button type="submit" class="btn">Delete Goal: "{{ item.goal }}"</button>
+                <button type="submit" class="btn">Delete Goal: "{{ item.goal }}"</button><p>
             </form>
         {% endfor %}
-        <a href="{{ url_for('main.weekly_chart') }}" class="link">View Weekly Workout Chart</a>
+        <a href="{{ url_for('main.weekly_chart') }}" class="link">View Weekly Workout Chart</a><p>
     {% else %}
         <div style="margin: 20px; padding: 10px; border: 1px solid #FFD700; border-radius: 5px; text-align: center;">
             No progress data available. Add goals and workouts to see progress!
@@ -100,6 +109,16 @@
         function confirmDelete() {
             return confirm("Are you sure you want to delete this goal?");
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const progressBars = document.querySelectorAll(".progress-bar");
+            progressBars.forEach(bar => {
+                const progress = bar.getAttribute("data-progress");
+                if (progress) {
+                    bar.style.width = `${progress}%`;
+                }
+            });
+        });
     </script>
 </body>
 </html>

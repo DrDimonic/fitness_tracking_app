@@ -101,7 +101,7 @@
             <select id="past_workouts" onchange="displayWorkoutDetails()">
                 <option value="">Select a Past Workout</option>
                 {% for workout in all_workouts %}
-                    <option value="{{ workout.id }}">{{ workout.details }}</option>
+                    <option value="{{ workout.id }}">{{ workout.date }} - {{ workout.details }}</option>
                 {% endfor %}
             </select>
         </form>

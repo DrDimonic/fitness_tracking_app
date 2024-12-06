@@ -19,7 +19,9 @@ def index():
 @login_required
 def log_workout():
     select_form = SelectWorkoutTypeForm()
-    user_workouts = Workout.select().where(Workout.user == current_user.id)
+
+    # Fetch workouts for the current user and sort by date (descending)
+    user_workouts = Workout.select().where(Workout.user == current_user.id).order_by(Workout.date.desc())
 
     # Serialize workouts for display
     all_workouts = [
@@ -28,14 +30,14 @@ def log_workout():
             'type': workout.workout_type,
             'date': workout.date.strftime('%Y-%m-%d'),
             'details': (
-                f"Run - {workout.distance} miles, Duration: {workout.duration} minutes"
+                f"Run - Distance: {workout.distance} miles, Duration: {workout.duration} minutes"
                 if workout.workout_type == "run"
-                else f"Lift - {workout.exercise if workout.exercise != 'custom' else workout.custom_exercise}, Weight: {workout.weight} lbs, Sets: {workout.sets}, Reps: {workout.reps}, Duration: {workout.duration} minutes"
+                else f"Lift - {workout.exercise or 'Custom'}, Weight: {workout.weight} lbs, Sets: {workout.sets}, Reps: {workout.reps}"
             )
         }
         for workout in user_workouts
     ]
-    
+
     if select_form.validate_on_submit():
         if select_form.workout_type.data == 'run':
             return redirect(url_for('main.log_run'))
@@ -47,6 +49,7 @@ def log_workout():
         form=select_form,
         all_workouts=all_workouts
     )
+
 
 
 # Delete workout

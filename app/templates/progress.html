@@ -93,7 +93,7 @@
                 </div>
             </div>
             <form method="POST" action="{{ url_for('main.delete_goal', goal_id=item.goal_id) }}" onsubmit="return confirmDelete();">
-                <button type="submit" class="btn">Delete Goal: "{{ item.goal }}"</button><p>
+                <button type="submit" class="btn">Remove Goal: "{{ item.goal }}"</button><p>
             </form>
         {% endfor %}
         <a href="{{ url_for('main.weekly_chart') }}" class="link">View Weekly Workout Chart</a><p>

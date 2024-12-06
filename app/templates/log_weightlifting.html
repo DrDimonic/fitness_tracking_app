@@ -65,16 +65,30 @@
         {{ form.hidden_tag() }}
         <p>{{ form.date.label }}<br>{{ form.date() }}</p>
         <p>{{ form.exercise.label }}<br>{{ form.exercise() }}</p>
-        <p>{{ form.custom_exercise.label }}<br>{{ form.custom_exercise() }}</p>
+        <div id="customExerciseField" style="display: none;">
+            <p>{{ form.custom_exercise.label }}<br>{{ form.custom_exercise() }}</p>
+        </div>
         <p>{{ form.weight.label }}<br>{{ form.weight() }}</p>
         <p>{{ form.sets.label }}<br>{{ form.sets() }}</p>
         <p>{{ form.reps.label }}<br>{{ form.reps() }}</p>
-        <p>{{ form.time.label }}<br>{{ form.time() }}</p>
+        <p>{{ form.duration.label }}<br>{{ form.duration() }}</p>
         <p>{{ form.difficulty.label }}<br>{{ form.difficulty() }}</p>
         <p><button class="btn">{{ form.submit() }}</button></p>
     </form>
     <footer>
         <a href="{{ url_for('main.log_workout') }}" class="link">Back to Workout Selection</a>
     </footer>
+    <script>
+        const exerciseField = document.querySelector('#exercise');
+        const customExerciseField = document.querySelector('#customExerciseField');
+    
+        exerciseField.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customExerciseField.style.display = 'block';
+            } else {
+                customExerciseField.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

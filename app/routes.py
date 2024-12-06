@@ -26,16 +26,16 @@ def log_workout():
         {
             'id': workout.id,
             'type': workout.workout_type,
-            'date': f"{'Run' if workout.workout_type == 'run' else 'Lift'} - {workout.date.strftime('%Y-%m-%d')}",
+            'date': workout.date.strftime('%Y-%m-%d'),
             'details': (
-                f"Distance: {workout.distance} miles, Duration: {workout.duration} minutes"
+                f"Run - {workout.distance} miles, Duration: {workout.duration} minutes"
                 if workout.workout_type == "run"
-                else f"Exercise: {workout.exercise}, Weight: {workout.weight} lbs, Sets: {workout.sets}, Reps: {workout.reps}"
+                else f"Lift - {workout.exercise if workout.exercise != 'custom' else workout.custom_exercise}, Weight: {workout.weight} lbs, Sets: {workout.sets}, Reps: {workout.reps}, Duration: {workout.duration} minutes"
             )
         }
         for workout in user_workouts
     ]
-
+    
     if select_form.validate_on_submit():
         if select_form.workout_type.data == 'run':
             return redirect(url_for('main.log_run'))
@@ -84,19 +84,25 @@ def log_run():
 def log_weightlifting():
     lifting_form = WeightliftingForm()
     if lifting_form.validate_on_submit():
+        # Check if a custom exercise name is provided
+        exercise_name = lifting_form.exercise.data
+        if exercise_name == 'custom':
+            exercise_name = lifting_form.custom_exercise.data
+
         Workout.create(
             user=current_user.id,
             workout_type="weightlifting",
             date=lifting_form.date.data,
-            exercise=lifting_form.exercise.data,
+            exercise=exercise_name,  # Use the actual exercise name
             weight=lifting_form.weight.data,
             sets=lifting_form.sets.data,
             reps=lifting_form.reps.data,
-            duration=lifting_form.time.data
+            duration=lifting_form.duration.data,
         )
-        flash("Weightlifting logged successfully!", 'success')
+        flash("Weightlifting logged successfully!")
         return redirect(url_for('main.log_workout'))
     return render_template('log_weightlifting.html', form=lifting_form)
+
 
 # Route for setting goals
 @main.route('/set_goal', methods=['GET', 'POST'])

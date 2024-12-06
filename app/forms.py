@@ -53,7 +53,7 @@ class WeightliftingForm(FlaskForm):
     weight = FloatField('Weight (lbs)', validators=[DataRequired()])
     sets = IntegerField('Number of Sets', validators=[DataRequired()])
     reps = IntegerField('Repetitions', validators=[DataRequired()])  
-    time = IntegerField('Duration (minutes)', validators=[DataRequired(), NumberRange(min=1)])
+    duration = IntegerField('Duration (minutes)', validators=[DataRequired(), NumberRange(min=1)])
     difficulty = SelectField(
         'Difficulty',
         choices=[('easy', 'Easy'), ('moderate', 'Moderate'), ('hard', 'Hard')],

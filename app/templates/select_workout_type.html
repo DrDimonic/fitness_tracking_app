@@ -99,9 +99,9 @@
             <!-- Dropdown for Past Workouts -->
             <label for="past_workouts">Past Workouts:</label>
             <select id="past_workouts" onchange="displayWorkoutDetails()">
-                <option value="">Select a past workout</option>
+                <option value="">Select a Past Workout</option>
                 {% for workout in all_workouts %}
-                    <option value="{{ workout.id }}">{{ workout.date }} - {{ workout.details }}</option>
+                    <option value="{{ workout.id }}">{{ workout.details }}</option>
                 {% endfor %}
             </select>
         </form>

@@ -86,23 +86,25 @@
 <body>
     <header>Select Workout Type</header>
     <main>
-        <form method="POST">
+        <form method="POST" action="{{ url_for('main.log_workout') }}">
             {{ form.hidden_tag() }}
-        <div class="workout-type-container">
-            <label>{{ form.workout_type.label }}:</label>
-            {{ form.workout_type() }}
-            <button type="submit" class="btn">Log Workout</button>
-        </div>
-        </form>
+            <div class="workout-type-container">
+                <label>{{ form.workout_type.label }}:</label>
+                {{ form.workout_type() }}
+                <button type="submit" class="btn">Log Workout</button>
+            </div>
         
-        <!-- Dropdown for Past Workouts -->
-        <label for="past_workouts">Past Workouts:</label>
-        <select id="past_workouts" onchange="displayWorkoutDetails()">
-            <option value="">Select a past workout</option>
-            {% for workout in all_workouts %}
-                <option value="{{ workout.id }}">{{ workout.date }} - {{ workout.details }}</option>
-            {% endfor %}
-        </select>
+        </form>
+        <form>
+            <!-- Dropdown for Past Workouts -->
+            <label for="past_workouts">Past Workouts:</label>
+            <select id="past_workouts" onchange="displayWorkoutDetails()">
+                <option value="">Select a past workout</option>
+                {% for workout in all_workouts %}
+                    <option value="{{ workout.id }}">{{ workout.date }} - {{ workout.details }}</option>
+                {% endfor %}
+            </select>
+        </form>
 
         <!-- Dynamic Workout Details -->
         <div id="workout_details" style="margin-top: 20px;"></div>

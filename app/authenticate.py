@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required
 from .models import User
 from . import bcrypt
 
@@ -31,25 +31,17 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        print(f"Attempting login with email: {email}")  # Debugging
-
         user = User.get_or_none(User.email == email)
-        if user:
-            print("User found in database.")  # Debugging
-            if bcrypt.check_password_hash(user.password, password):
-                login_user(user)
-                flash('Login successful!', 'success')
-                return redirect(url_for('main.index'))
-            else:
-                print("Password does not match.")  # Debugging
+        if user and bcrypt.check_password_hash(user.password, password):
+            login_user(user)
+            flash('Login successful!', 'success')
+            return redirect(url_for('main.index'))
         else:
-            print("No user found with that email.")  # Debugging
+            flash('Invalid email or password. Please try again.', 'danger')
 
-        flash('Invalid email or password.', 'danger')
     return render_template('login.html')
 
-# Logout
-@auth.route('/logout')
+@auth.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()

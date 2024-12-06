@@ -2,6 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from .models import db, User
+from .routes import main
 import os
 
 bcrypt = Bcrypt()
@@ -15,8 +16,9 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
     
-    # Make sessions temporary
-    app.config['SESSION_PERMANENT'] = False  
+    app.config['SESSION_PROTECTION'] = 'strong'  # Enforces stricter session management
+    app.config['REMEMBER_COOKIE_DURATION'] = 0  # Ensures the session cookie expires when the browser is closed
+
     
     # Set the database path
     app.config['DATABASE'] = os.path.join(os.path.dirname(__file__), 'databases', 'fitness_app.db')

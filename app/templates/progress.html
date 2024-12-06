@@ -16,7 +16,6 @@
             color: white; 
             font-size: 20px; 
         }
-
         header {
             width: 100%;
             background-color: green; 
@@ -26,27 +25,25 @@
             font-size: 1.6em;
             font-weight: bold;
         }
-
         .progress-container {
             width: 100%;
             background-color: white;
             border-radius: 25px;
             margin: 10px 0;
         }
-
         .progress-bar {
             height: 20px;
             background-color: gold;
-            width: 0;
             border-radius: 25px;
             text-align: center;
             color: white;
             font-size: 14px;
             line-height: 20px;
-            transition: background-color 0.3s ease;
-            overflow: hidden; /* Ensure no stray content is visible */
+            transition: background-color 0.3s ease, width 0.3s ease;
         }
-
+        .progress-bar[data-progress="100"] {
+            background-color: #4CAF50;
+        }
         .btn {
             background-color: red;
             color: white;
@@ -55,11 +52,9 @@
             cursor: pointer;
             border-radius: 5px;
         }
-
         .btn:hover {
             background-color: darkred;
         }
-
         footer {
             width: 100%;
             text-align: center;
@@ -67,13 +62,11 @@
             padding: 15px;
             background-color: black; 
         }
-
         .link {
             color: deepskyblue; 
             text-decoration: none;
             margin-top: 20px;
         }
-
         .link:hover {
             text-decoration: underline;
         }
@@ -85,17 +78,9 @@
         {% for item in progress_data %}
             <h3>{{ item.goal }}</h3>
             <p>Target Date: {{ item.target_date }}</p>
-            <p>Progress: {{ item.progress }}%</p>
             <div class="progress-container">
-                <div 
-                    class="progress-bar" 
-                    style="width: {{ item.progress }}%; background-color: {% if item.progress >= 100 %}#4CAF50{% else %}#FFD700{% endif %};"
-                >
-                    {% if item.progress >= 100 %}
-                        Congratulations!
-                    {% else %}
-                        {{ item.progress }}%
-                    {% endif %}
+                <div class="progress-bar" style="width: {{ item.progress }}%;" data-progress="{{ item.progress }}">
+                    {{ 'Congratulations!' if item.progress >= 100 else item.progress ~ '%' }}
                 </div>
             </div>
             <form method="POST" action="{{ url_for('main.delete_goal', goal_id=item.goal_id) }}" onsubmit="return confirmDelete();">
@@ -104,7 +89,9 @@
         {% endfor %}
         <a href="{{ url_for('main.weekly_chart') }}" class="link">View Weekly Workout Chart</a>
     {% else %}
-        <p>No progress data available. Add goals and workouts to see progress!</p>
+        <div style="margin: 20px; padding: 10px; border: 1px solid #FFD700; border-radius: 5px; text-align: center;">
+            No progress data available. Add goals and workouts to see progress!
+        </div>
     {% endif %}
     <footer>
         <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>

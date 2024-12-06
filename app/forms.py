@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, SelectField, IntegerField, SubmitField, DateField
-from wtforms.validators import DataRequired, Length, Optional
+from wtforms.validators import DataRequired, Length, Optional, NumberRange
 from . import db
 
 class SelectWorkoutTypeForm(FlaskForm):
@@ -52,7 +52,8 @@ class WeightliftingForm(FlaskForm):
     custom_exercise = StringField('Custom Exercise Name', validators=[Optional(), Length(max=50)])
     weight = FloatField('Weight (lbs)', validators=[DataRequired()])
     sets = IntegerField('Number of Sets', validators=[DataRequired()])
-    reps = IntegerField('Repetitions', validators=[DataRequired()])  # New field for repetitions
+    reps = IntegerField('Repetitions', validators=[DataRequired()])  
+    time = IntegerField('Duration (minutes)', validators=[DataRequired(), NumberRange(min=1)])
     difficulty = SelectField(
         'Difficulty',
         choices=[('easy', 'Easy'), ('moderate', 'Moderate'), ('hard', 'Hard')],

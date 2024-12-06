@@ -92,6 +92,7 @@ def log_weightlifting():
             weight=lifting_form.weight.data,
             sets=lifting_form.sets.data,
             reps=lifting_form.reps.data,
+            duration=lifting_form.time.data
         )
         flash("Weightlifting logged successfully!", 'success')
         return redirect(url_for('main.log_workout'))
@@ -191,7 +192,10 @@ def weekly_chart():
 
     for workout in user_workouts:
         day_name = workout.date.strftime('%A')
-        workout_durations[day_name] += workout.duration or 0
+        if day_name in workout_durations:
+            if workout.workout_type == 'run' or workout.workout_type == 'weightlifting':
+                workout_durations[day_name] += workout.duration or 0 
+
 
     fig, ax = plt.subplots(figsize=(10, 6))
     bars = ax.bar(workout_durations.keys(), workout_durations.values(), color='blue')

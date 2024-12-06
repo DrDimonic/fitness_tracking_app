@@ -2,10 +2,6 @@
 <html>
 <head>
     <title>Register</title>
-</head>
-<body>
-    <header>Register</header>
-
     <!-- Styling for the page layout and design -->
     <style>
         body {
@@ -17,16 +13,17 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background-color: #2c2c2c; /* Dark gray background */
-            color: white; /* White text for contrast */
+            background-color: #2c2c2c; /* Dark gray */
+            color: white; 
         }
 
-        form {
-            background-color: #444;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .form-container {
+            background-color: darkgray; 
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
             text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         input[type="email"], input[type="password"] {
@@ -50,23 +47,41 @@
             background-color: darkgreen;
         }
 
-        .link {
+        a {
             color: deepskyblue;
             text-decoration: none;
-            margin-top: 10px;
+            margin-top: 15px;
+            display: inline-block;
         }
 
-        .link:hover {
+        a:hover {
             text-decoration: underline;
         }
     </style>
-    
+</head>
+<body>
+    <!-- Registration form container -->
+    <div class="form-container">
+        <h2>Register</h2>
+
+        <!-- Flash message for successful or unsuccessful login -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+    <!-- Registration form -->
     <form method="POST">
         <p><label>Username:</label><br><input type="text" name="username" required></p>
         <p><label>Email:</label><br><input type="email" name="email" required></p>
         <p><label>Password:</label><br><input type="password" name="password" required></p>
         <p><button type="submit">Register</button></p>
     </form>
+
+    <!-- Footer & link to login instead of register -->
     <footer>
         <a href="{{ url_for('auth.login') }}">Already have an account? Log in</a>
     </footer>

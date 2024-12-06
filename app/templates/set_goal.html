@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Set Goal</title>
-
     <!-- Styling for the page layout and design -->
     <style>
         body {
@@ -14,7 +13,7 @@
             align-items: center;
             justify-content: flex-start;
             min-height: 100vh;
-            background-color: #2c2c2c; /* Dark gray background */
+            background-color: #2c2c2c; /* Dark gray */
             color: white;
         }
     
@@ -47,7 +46,7 @@
             text-align: center;
             margin-top: auto;
             padding: 15px;
-            background-color: black; /* Darker gray footer */
+            background-color: black; 
         }
         
         .link {
@@ -62,13 +61,20 @@
     </style>  
 </head>
 <body>
+    <!-- Header -->
     <header>Set a New Goal</header>
+
+    <!-- Form for creating a new goal -->
     <form method="POST">
         {{ form.hidden_tag() }}
+
+        <!-- Goal details input & goal submission -->
         <p>{{ form.goal_description.label }}<br>{{ form.goal_description(size=64) }}</p>
         <p>{{ form.target_date.label }}<br>{{ form.target_date() }}</p>
         <p>{{ form.submit() }}</p>
     </form>
+
+    <!-- Footer & link back to home -->
     <footer>
         <a href="{{ url_for('main.index') }}" class="link">Back to Home</a>  
     </footer>  

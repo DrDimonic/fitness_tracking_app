@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Log Run</title>
-    
     <!-- Styling for the page layout and design -->
     <style>
         
@@ -15,7 +14,7 @@
             align-items: center;
             justify-content: flex-start;
             min-height: 100vh;
-            background-color: #2c2c2c; /* Dark gray background */
+            background-color: #2c2c2c; /* Dark gray */
             color: white;
         }
     
@@ -48,7 +47,7 @@
             text-align: center;
             margin-top: auto;
             padding: 15px;
-            background-color: black; /* Darker gray footer */
+            background-color: black; 
         }
 
         .link {
@@ -63,14 +62,21 @@
     </style> 
 </head>
 <body>
+    <!-- Header -->
     <header>Log a Run</header>
+
+    <!-- Form for logging run details -->
     <form method="POST">
         {{ form.hidden_tag() }}
         <p>{{ form.date.label }}<br>{{ form.date() }}</p>
         <p>{{ form.distance.label }}<br>{{ form.distance() }}</p>
         <p>{{ form.duration.label }}<br>{{ form.duration() }}</p>
+
+        <!-- Submit button -->
         <p><button class="btn">{{ form.submit() }}</button></p>
     </form>
+
+    <!-- Footer & link back to workout selection-->
     <footer>
         <a href="{{ url_for('main.log_workout') }}" class="link">Back to Workout Selection</a>
     </footer>

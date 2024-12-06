@@ -32,7 +32,7 @@ def log_workout():
             'type': workout.workout_type,
             'date': workout.date.strftime('%Y-%m-%d'),
             'details': (
-                f"Distance: {workout.duration} miles, Time: {workout.duration} minutes"
+                f"Distance: {workout.distance} miles, Duration: {workout.duration} minutes"
                 if workout.workout_type == "run"
                 else f"Exercise: {workout.exercise}, Weight: {workout.weight} lbs, Sets: {workout.sets}, Reps: {workout.reps}"
             )
@@ -45,12 +45,13 @@ def log_workout():
             return redirect(url_for('main.log_run'))
         elif select_form.workout_type.data == 'weightlifting':
             return redirect(url_for('main.log_weightlifting'))
-    
+
     return render_template(
         'select_workout_type.html',
         form=select_form,
         all_workouts=all_workouts
     )
+
 
 # Route for deleting workouts
 @main.route('/delete_workout/<int:workout_id>', methods=['POST'])

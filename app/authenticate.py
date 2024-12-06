@@ -48,10 +48,10 @@ def login():
         flash('Invalid email or password.', 'danger')
     return render_template('login.html')
 
-
+# Logout
 @auth.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'info')
-    return redirect(url_for('auth.login'))
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('main.index'))

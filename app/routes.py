@@ -197,11 +197,11 @@ def weekly_chart():
                 workout_durations[day_name] += workout.duration or 0 
 
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(15, 9))
     bars = ax.bar(workout_durations.keys(), workout_durations.values(), color='blue')
 
-    ax.set_ylabel('Duration (minutes)', fontsize=14)
-    ax.set_xlabel('Day', fontsize=14)
+    ax.set_ylabel('Duration (minutes)', fontsize=12)
+    ax.set_xlabel('Day', fontsize=12)
     ax.set_ylim(0, 240)
 
     buffer = io.BytesIO()

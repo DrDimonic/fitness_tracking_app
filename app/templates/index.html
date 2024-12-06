@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitness Tracker</title>
     <style>
+        /* Styling for the page layout and design */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -14,13 +15,13 @@
             align-items: center;
             justify-content: flex-start;
             min-height: 100vh;
-            background-color: #2c2c2c; /* Dark gray background */
-            color: white; /* White text for contrast */
+            background-color: #2c2c2c; /* Dark gray */
+            color: white;
         }
 
         header {
             width: 100%;
-            background-color: green; /* Green ribbon */
+            background-color: green; 
             padding: 20px;
             text-align: center;
             color: white;
@@ -78,25 +79,30 @@
     </style>
 </head>
 <body>
+
+    <!-- Header & Logout Button -->
     <header>
         Fitness Tracker
-        <!-- Logout Form Positioned in the Top Right -->
         <form action="{{ url_for('auth.logout') }}" method="POST" onsubmit="return confirmLogout();" style="display: inline;">
             <button type="submit" class="btn logout-btn">Logout</button>
         </form>
     </header>
+
+    <!-- Navigation Buttons -->
     <main>
         <h2>Welcome! <p>Track your workouts, set personal goals, and monitor your progress all in one place.</h2>
         <a href="{{ url_for('main.log_workout') }}" class="btn">Log Workout</a>
         <a href="{{ url_for('main.set_goal') }}" class="btn">Set Goal</a>
         <a href="{{ url_for('main.progress') }}" class="btn">View Progress</a>
     </main>
+
+    <!-- Footer -->
     <footer>
         <a >Dominic Cork</a>
     </footer>
 
+    <!-- Confirmation popup for Logout -->
     <script>
-        // Confirmation popup for logout
         function confirmLogout() {
             return confirm('Are you sure you want to logout?');
         }

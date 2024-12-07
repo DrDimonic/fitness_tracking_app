@@ -8,7 +8,7 @@ This is a Fitness Tracker application which allows users to log workouts, set fi
     - git clone https://github.com/DrDimonic/fitness_tracking_app
     - cd fitness_tracking_app
 2. Create a virtual environment
-    - venv
+    - python -m venv venv
 3. Install dependencies
     - pip install -r requirements.txt
 4. Initialize the Database

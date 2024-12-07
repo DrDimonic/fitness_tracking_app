@@ -50,8 +50,7 @@ This is a Fitness Tracker application which allows users to log workouts, set fi
 - weekly_workout_chart.html: Visual representation of weekly workout durations.
 - select_workout_type.html: Page to select workout types and view/delete past workouts.
 - set_goal.html: Page to set fitness goals.
-- log_run.html: Form for logging running workouts
-- log_weightlifting.html: From for logging weightlifting workouts.
+- log_run.html & log_weightlifting.html: Forms for logging workouts.
 
 ## Features
 - User authentication

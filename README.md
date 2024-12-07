@@ -6,7 +6,7 @@ This is a Fitness Tracker application which allows users to log workouts, set fi
 ## Setup
 1. Clone the repository 
     - git clone https://github.com/DrDimonic/fitness_tracking_app
-    - cd <repository-folder>
+    - cd fitness_tracking_app
 2. Create a virtual environment
     - venv
 3. Install dependencies
@@ -54,12 +54,12 @@ This is a Fitness Tracker application which allows users to log workouts, set fi
 - log_weightlifting.html: From for logging weightlifting workouts.
 
 ## Features
-1. User authentication
+- User authentication
     - Secure login and registration.
-2. Workout logging
+- Workout logging
     - Log running and weightlifting workouts with customizable inputs.
-3. Goal setting & tracking
+- Goal setting & tracking
     - Set fitness goals such as running a specific distance or lifting a target weight.
     - View goal progress with dynamic progress bars.
-4. Visual Data Representation
+- Visual Data Representation
     - Weekly workout chart showing total time spent working out each day.

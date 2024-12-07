@@ -48,6 +48,11 @@
             background-color: darkgreen;
         }
 
+        .error-message {
+            color: red;
+            list-style-type: none;
+        }
+
         .link {
             color: deepskyblue;
             text-decoration: none;
@@ -60,9 +65,22 @@
     </style>
 </head>
 <body>
-    <!-- Login form & Header-->
+    <!-- Login form & Header -->
     <form method="POST" action="{{ url_for('auth.login') }}">
         <h2>Login</h2>
+        
+        <!-- Display success and error messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    {% if category == 'danger' %}
+                        <li class="error-message">{{ message }}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
         <!-- Input for email & password -->
         <input type="email" name="email" placeholder="Email" required>

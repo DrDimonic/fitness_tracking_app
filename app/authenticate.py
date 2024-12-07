@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session
 from flask_login import login_user, logout_user, login_required
 from .models import User
 from . import bcrypt
@@ -37,17 +37,17 @@ def login():
         user = User.get_or_none(User.email == email)
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
-            flash('Login successful!', 'success')
             return redirect(url_for('main.index'))
         else:
             flash('Invalid email or password. Please try again.', 'danger')
 
     return render_template('login.html')
 
-# Route to handle user logout
-@auth.route('/logout', methods=['POST'])
+@auth.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'success')
-    return redirect(url_for('main.index'))
+    session.pop('_flashes', None)
+    session.clear() 
+    return redirect(url_for('auth.login'))
+

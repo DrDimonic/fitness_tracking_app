@@ -47,6 +47,11 @@
             background-color: darkgreen;
         }
 
+        .error-message {
+            color: red;
+            list-style-type: none;
+        }
+
         a {
             color: deepskyblue;
             text-decoration: none;
@@ -63,6 +68,18 @@
     <!-- Registration form container -->
     <div class="form-container">
         <h2>Register</h2>
+
+        <!-- Display success and error messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    {% set color = 'red' if category == 'danger' %}
+                    <li class="error-message">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
     <!-- Registration form -->
     <form method="POST">

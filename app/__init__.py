@@ -17,7 +17,7 @@ def load_user(user_id):
 # Create and configure the Flask app
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'your_secret_key'
+    app.config['SECRET_KEY'] = '92dab6ea58e3ebabb95f0a1424de5b45'
 
     # Application configurations
     app.config['SESSION_PROTECTION'] = 'strong'  
